@@ -16,9 +16,13 @@
     <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <version.javaee-api>8.0</version.javaee-api>
+    <version.junit>5.2.0</version.junit>
+    <version.junit-surefire>1.2.0</version.junit-surefire>
+    <version.jmockit>1.39</version.jmockit>
     <version.maven-compiler-plugin>3.7.0</version.maven-compiler-plugin>
     <version.maven-ejb-plugin>3.0.1</version.maven-ejb-plugin>
     <version.maven-dependency-plugin>3.1.0</version.maven-dependency-plugin>
+    <version.maven-surefire-plugin>2.21.0</version.maven-surefire-plugin>
   </properties>
 
   <dependencies>
@@ -27,6 +31,18 @@
       <artifactId>javaee-api</artifactId>
       <version>${version.javaee-api}</version>
       <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <version>${version.junit}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jmockit</groupId>
+      <artifactId>jmockit</artifactId>
+      <version>${version.jmockit}</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 
@@ -76,6 +92,17 @@
             </configuration>
           </execution>
         </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>${version.maven-surefire-plugin}</version>
+        <dependencies>
+          <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-surefire-provider</artifactId>
+            <version>${version.junit-surefire}</version>
+          </dependency>
+        </dependencies>
       </plugin>
     </plugins>
   </build>
