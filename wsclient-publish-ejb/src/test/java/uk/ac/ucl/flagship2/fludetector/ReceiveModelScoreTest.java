@@ -1,11 +1,13 @@
 package uk.ac.ucl.flagship2.fludetector;
 
 import java.nio.charset.StandardCharsets;
+import javax.enterprise.event.Event;
 import javax.jms.BytesMessage;
 import javax.jms.JMSException;
 import javax.jms.ObjectMessage;
 import javax.jms.TextMessage;
 import mockit.Expectations;
+import mockit.Injectable;
 import mockit.Mocked;
 import mockit.Tested;
 import org.junit.jupiter.api.Assertions;
@@ -16,6 +18,9 @@ import org.junit.jupiter.api.Test;
  * @author David Guzman
  */
 public class ReceiveModelScoreTest {
+
+  @Injectable
+  Event<String> msgEvent;
 
   @Tested
   ReceiveModelScore instance;

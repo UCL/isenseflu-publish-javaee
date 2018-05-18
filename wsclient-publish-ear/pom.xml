@@ -37,5 +37,26 @@
       <version>${project.version}</version>
       <type>ejb</type>
     </dependency>
+    <dependency>
+      <groupId>org.glassfish.jersey.security</groupId>
+      <artifactId>oauth1-client</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.jersey.security</groupId>
+      <artifactId>oauth1-signature</artifactId>
+      <version>${version.jersey}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
   </dependencies>
 </project>
