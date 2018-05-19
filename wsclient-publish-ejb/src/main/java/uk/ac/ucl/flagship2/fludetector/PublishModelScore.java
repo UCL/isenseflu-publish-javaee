@@ -6,7 +6,6 @@ import java.util.logging.Logger;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.ejb.LocalBean;
-import javax.enterprise.event.Observes;
 import javax.ws.rs.ProcessingException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -46,7 +45,7 @@ public class PublishModelScore {
   private final MessageFormat tweetFormat = new MessageFormat(
           "Estimated Influenza-like illness (ILI) rate in England is at {0} per 100K people");
 
-  public void publishScore(@Observes String score) {
+  public void publishScore(String score) {
 
     ClientConfig clientConfig = new ClientConfig();
     clientConfig.property(LoggingFeature.LOGGING_FEATURE_VERBOSITY_CLIENT, LoggingFeature.Verbosity.PAYLOAD_ANY);

@@ -1,7 +1,6 @@
 package uk.ac.ucl.flagship2.fludetector;
 
 import java.nio.charset.StandardCharsets;
-import javax.enterprise.event.Event;
 import javax.jms.BytesMessage;
 import javax.jms.JMSException;
 import javax.jms.ObjectMessage;
@@ -19,11 +18,11 @@ import org.junit.jupiter.api.Test;
  */
 public class ReceiveModelScoreTest {
 
-  @Injectable
-  Event<String> msgEvent;
-
   @Tested
   ReceiveModelScore instance;
+
+  @Injectable
+  CallScheduler callScheduler;
 
   @Test
   void testOnMessageWithTextMessage(@Mocked TextMessage textMessage) throws JMSException {

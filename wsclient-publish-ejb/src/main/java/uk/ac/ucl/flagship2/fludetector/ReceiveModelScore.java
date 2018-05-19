@@ -3,6 +3,7 @@ package uk.ac.ucl.flagship2.fludetector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.ActivationConfigProperty;
+import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
 import javax.jms.BytesMessage;
 import javax.jms.JMSException;
@@ -19,6 +20,9 @@ import javax.jms.TextMessage;
   @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue")
 })
 public class ReceiveModelScore implements MessageListener {
+
+  @EJB
+  private CallScheduler callScheduler;
 
   @Override
   public void onMessage(Message msg) {
@@ -47,6 +51,7 @@ public class ReceiveModelScore implements MessageListener {
       throw new IllegalArgumentException("Message must be of type TextMessage or ByteMessage");
     }
     if (!out.isEmpty()) {
+      callScheduler.setLastModelScore(out);
       try {
         Logger.getLogger(ReceiveModelScore.class.getName()).log(Level.INFO, "JMS Message ID {0} has been read and sent to PublishModelScore", msg.getJMSMessageID());
       } catch (JMSException ex) {
