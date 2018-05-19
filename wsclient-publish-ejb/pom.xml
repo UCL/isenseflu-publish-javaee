@@ -26,6 +26,13 @@
   </properties>
 
   <dependencies>
+    <!--
+<dependency>
+  <groupId>org.glassfish.jersey.connectors</groupId>
+  <artifactId>jersey-apache-connector</artifactId>
+  <scope>provided</scope>
+</dependency>
+    -->
     <dependency>
       <groupId>javax</groupId>
       <artifactId>javaee-api</artifactId>
@@ -66,6 +73,8 @@
         <configuration>
           <source>1.8</source>
           <target>1.8</target>
+          <debug>true</debug>
+          <debuglevel>lines,vars,source</debuglevel>
           <compilerArguments>
             <endorseddirs>${endorsed.dir}</endorseddirs>
           </compilerArguments>
