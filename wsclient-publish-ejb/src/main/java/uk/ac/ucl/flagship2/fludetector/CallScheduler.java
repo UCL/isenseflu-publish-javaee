@@ -33,8 +33,7 @@ public class CallScheduler {
     lastPublishedOn = new AtomicReference<>("");
   }
 
-  //@Schedule(hour = "9")
-  @Schedule(second = "0", minute = "*", hour = "*", persistent = false)
+  @Schedule(hour = "9")
   public void callPublisher() {
     if (!lastModelScore.get(0).equals(lastPublishedOn.get())) {
       publishModelScore.publishScore(lastModelScore.get(1));
