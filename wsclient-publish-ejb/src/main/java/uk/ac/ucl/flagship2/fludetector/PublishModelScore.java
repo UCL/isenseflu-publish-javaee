@@ -43,7 +43,7 @@ public class PublishModelScore {
   );
 
   private final MessageFormat tweetFormat = new MessageFormat(
-          "Estimated Influenza-like illness (ILI) rate in England is at {0} per 100K people");
+          "Based on Google searches, the estimated flu (Influenza-like illness) rate for England is {0} cases per 100,000 people #health #AI");
 
   public void publishScore(String score) {
 
