@@ -16,6 +16,7 @@
     <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <version.javaee-api>8.0</version.javaee-api>
+    <version.jfreechart>1.5.0</version.jfreechart>
     <version.junit>5.2.0</version.junit>
     <version.junit-surefire>1.2.0</version.junit-surefire>
     <version.jmockit>1.39</version.jmockit>
@@ -26,6 +27,11 @@
   </properties>
 
   <dependencies>
+    <dependency>
+      <groupId>org.jfree</groupId>
+      <artifactId>jfreechart</artifactId>
+      <version>${version.jfreechart}</version>
+    </dependency>
     <dependency>
       <groupId>javax</groupId>
       <artifactId>javaee-api</artifactId>
