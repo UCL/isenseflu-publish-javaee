@@ -1,3 +1,5 @@
 nb-configuration.xml
 target/
 
+.DS_Store
+*.png
