@@ -40,7 +40,7 @@ public class FluDetectorScores {
 
     if (response.getStatus() != Response.Status.OK.getStatusCode()) {
       client.close();
-      throw new EJBException("FluDetector Scores API did not return 200/OK");
+      throw new EJBException("Request to FluDetector Scores API did not return 200/OK");
     }
 
     JsonArray jsonArray = response.readEntity(JsonObject.class)
