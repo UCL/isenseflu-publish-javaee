@@ -1,11 +1,10 @@
 package uk.ac.ucl.flagship2.fludetector;
 
-import java.text.MessageFormat;
-import java.util.Properties;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.ejb.LocalBean;
+import javax.inject.Inject;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -50,6 +49,9 @@ public class PublishModelScore {
   private Client client;
   private Invocation.Builder updateInvocationBuilder;
 
+  @Inject
+  private MessageParser messageParser;
+
   @PostConstruct
   public void init() {
     clientConfig.property(
@@ -65,30 +67,12 @@ public class PublishModelScore {
             .queryParam("include_entities", "true").request(MediaType.APPLICATION_JSON_TYPE);
   }
 
-  private final MessageFormat tweetFormat = new MessageFormat(
-          "Based on Google searches, the estimated flu (Influenza-like illness) rate for England on {0} is {1} cases per 100,000 people #health #AI");
-
   public void publishScore(String scoreMsg) {
 
-    Properties properties = PropertyReader.readProperties(scoreMsg)
-            .orElseThrow(() -> new EJBException("Cannot read properties from message"));
-
-    String date = properties.getProperty("date", "");
-    String value = properties.getProperty("value", "");
-
-    if (date.isEmpty() || !date.matches("^\\d{4}-\\d{2}-\\d{2}$")) {
-      throw new EJBException("Date field was not provided or date not in ISO format");
-    }
-
-    if (value.isEmpty() || !value.matches("\\d+(\\.\\d+)?")) {
-      throw new EJBException("Score value was not provided or score value is not a number");
-    }
-
-    Object[] toFormat = {date, value};
-    String tweet = tweetFormat.format(toFormat);
+    MessageParser.TweetData tweetData = messageParser.getTweetData(scoreMsg);
 
     Form form = new Form();
-    form.param("status", tweet);
+    form.param("status", tweetData.getTweet());
 
     Entity ent = Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE);
 
