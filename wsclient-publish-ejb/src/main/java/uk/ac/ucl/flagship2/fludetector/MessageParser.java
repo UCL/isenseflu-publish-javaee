@@ -7,7 +7,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.MessageFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.List;
+import java.util.Locale;
 import java.util.Properties;
 import java.util.UUID;
 import javax.enterprise.context.Dependent;
@@ -28,7 +31,7 @@ public class MessageParser {
   private PlotModelScore plotModelScore;
 
   private final MessageFormat tweetFormat = new MessageFormat(
-          "Based on Google searches, the estimated flu (Influenza-like illness) rate for England on {0} is {1} cases per 100,000 people #health #AI");
+          "Based on Google searches, the estimated flu (Influenza-like illness) rate for England on {0} is {1} cases per 100,000 people https://fludetector.cs.ucl.ac.uk/?start={2}&end={3}&resolution=day&smoothing=0&model_regions-0=7-e #health #AI");
 
   public TweetData getTweetData(String message) {
     Properties properties = PropertyReader.readProperties(message)
@@ -38,17 +41,21 @@ public class MessageParser {
     String value = properties.getProperty("value", "");
 
     if (date.isEmpty() || !date.matches("^\\d{4}-\\d{2}-\\d{2}$")) {
-      throw new IllegalArgumentException("Date field was not provided or date not in ISO format");
+      throw new IllegalArgumentException("Date field not provided or date not in ISO format");
     }
 
     if (value.isEmpty() || !value.matches("\\d+(\\.\\d+)?")) {
-      throw new IllegalArgumentException("Score value was not provided or score value is not a number");
+      throw new IllegalArgumentException("Score value not provided or score value not a number");
     }
 
-    Object[] toFormat = {date, value};
+    LocalDate endDate = LocalDate.parse(date);
+    LocalDate startDate = LocalDate.parse(date).minusMonths(1);
+    String formattedDate = endDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(Locale.UK));
+
+    Object[] toFormat = {formattedDate.replaceFirst("0", "").replaceAll("-", " "), value, startDate, endDate};
     String tweet = tweetFormat.format(toFormat);
 
-    List<DatapointModelScore> scoresList = fluDetectorScores.getScoresForLast30Days(LocalDate.parse(date));
+    List<DatapointModelScore> scoresList = fluDetectorScores.getScoresForLast30Days(endDate);
 
     BufferedImage chart = plotModelScore.createLineChart(scoresList);
 
