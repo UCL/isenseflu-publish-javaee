@@ -16,6 +16,7 @@ import javax.enterprise.context.Dependent;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.DateAxis;
+import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.chart.renderer.xy.XYSplineRenderer;
@@ -33,7 +34,7 @@ public class PlotModelScore {
 
   private final static int WIDTH = 800;
   private final static int HEIGHT = 400;
-  private final String TITLE = "Influenza-Like Illness Rate per Day";
+  private final String TITLE = "Daily flu (influenza-like illness) rates for England";
   private final String SERIES = "Google v2.018.04/England";
   private final String XLABEL = "Date";
   private final String YLABEL = "ILI Rate";
@@ -83,10 +84,16 @@ public class PlotModelScore {
     plot.setOutlinePaint(Color.WHITE);
     plot.setRenderer(renderer);
 
-    DateAxis axis = (DateAxis) plot.getDomainAxis();
-    axis.setDateFormatOverride(dateFormat);
-    axis.setLabelFont(axisFont);
-    plot.getRangeAxis().setLabelFont(axisFont);
+    DateAxis dateAxis = (DateAxis) plot.getDomainAxis();
+    dateAxis.setDateFormatOverride(dateFormat);
+    dateAxis.setUpperMargin(0.05);
+    dateAxis.setLabelFont(axisFont);
+
+    ValueAxis valueAxis = plot.getRangeAxis();
+    valueAxis.setLowerBound(0);
+    valueAxis.setLabelFont(axisFont);
+
+    chart.removeLegend();
 
     return chart.createBufferedImage(WIDTH, HEIGHT);
 
