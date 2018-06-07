@@ -1,11 +1,17 @@
 package uk.ac.ucl.flagship2.fludetector;
 
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.MessageFormat;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Properties;
+import java.util.UUID;
 import javax.enterprise.context.Dependent;
+import javax.imageio.ImageIO;
 import javax.inject.Inject;
 
 /**
@@ -53,6 +59,7 @@ public class MessageParser {
 
     private final String tweet;
     private final BufferedImage chart;
+    private final UUID chartId = UUID.randomUUID();
 
     private TweetData(String tweet, BufferedImage chart) {
       this.tweet = tweet;
@@ -65,6 +72,21 @@ public class MessageParser {
 
     public BufferedImage getChart() {
       return chart;
+    }
+
+    public InputStream getChartAsPng() throws IOException {
+      final ByteArrayOutputStream os = new ByteArrayOutputStream() {
+        @Override
+        public synchronized byte[] toByteArray() {
+          return this.buf;
+        }
+      };
+      ImageIO.write(chart, "png", os);
+      return (InputStream) new ByteArrayInputStream(os.toByteArray(), 0, os.size());
+    }
+
+    public String getPngFilename() {
+      return chartId + ".png";
     }
 
   }
