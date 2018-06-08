@@ -34,7 +34,7 @@ public class MessageParser {
   private PlotModelScore plotModelScore;
 
   private final MessageFormat tweetFormat = new MessageFormat(
-          "Based on Google searches, the estimated flu (Influenza-like illness) rate for England on {0} is {1} cases per 100,000 people with an average 7-day {2} rate of {3}% compared to the previous 7-day period https://fludetector.cs.ucl.ac.uk/?start={4}&end={5}&resolution=day&smoothing=0&model_regions-0=7-e #health #AI");
+          "Based on Google searches, the estimated flu (influenza-like illness) rate for England on the {0} is {1} cases per 100,000 people with an average 7-day {2} rate of {3}% compared to the previous 7-day period https://fludetector.cs.ucl.ac.uk/?start={4}&end={5}&resolution=day&smoothing=0&model_regions-0=7-e #health #AI");
 
   public TweetData getTweetData(String message) {
     Properties properties = PropertyReader.readProperties(message)
@@ -53,9 +53,27 @@ public class MessageParser {
 
     LocalDate endDate = LocalDate.parse(date);
     LocalDate startDate = LocalDate.parse(date).minusMonths(1);
+    String ordinal = "th of ";
+    int day = endDate.getDayOfMonth();
+    switch (day) {
+      case 1:
+        ordinal = "st of ";
+        break;
+      case 2:
+        ordinal = "nd of ";
+        break;
+      case 3:
+        ordinal = "rd of ";
+        break;
+      default:
+        break;
+    }
     String formattedDate = endDate
-            .format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(Locale.UK))
-            .replaceFirst("^0", "").replaceAll("-", " ");
+            .format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG).withLocale(Locale.UK))
+            .replaceFirst("^0", "")
+            .replaceAll("-", " ")
+            .replaceFirst(" ", ordinal)
+            .replaceFirst("( \\d{4})$", ",$1");
 
     BigDecimal bd = new BigDecimal(value);
     bd = bd.setScale(3, RoundingMode.HALF_UP);

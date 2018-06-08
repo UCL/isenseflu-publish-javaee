@@ -51,7 +51,7 @@ public class MessageParserTest extends DataStubs {
     };
     String message = "date=2018-05-20" + System.lineSeparator() + "value=2.892199";
     MessageParser.TweetData tweetData = instance.getTweetData(message);
-    String expected = "Based on Google searches, the estimated flu (Influenza-like illness) rate for England on 20 May 2018 is 2.892 cases per 100,000 people with an average 7-day increase rate of 4.06% compared to the previous 7-day period https://fludetector.cs.ucl.ac.uk/?start=2018-04-20&end=2018-05-20&resolution=day&smoothing=0&model_regions-0=7-e #health #AI";
+    String expected = "Based on Google searches, the estimated flu (influenza-like illness) rate for England on the 20th of May, 2018 is 2.892 cases per 100,000 people with an average 7-day increase rate of 4.06% compared to the previous 7-day period https://fludetector.cs.ucl.ac.uk/?start=2018-04-20&end=2018-05-20&resolution=day&smoothing=0&model_regions-0=7-e #health #AI";
     Assertions.assertEquals(expected, tweetData.getTweet());
   }
 
