@@ -5,6 +5,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.MessageFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -52,7 +54,10 @@ public class MessageParser {
     LocalDate startDate = LocalDate.parse(date).minusMonths(1);
     String formattedDate = endDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(Locale.UK));
 
-    Object[] toFormat = {formattedDate.replaceFirst("0", "").replaceAll("-", " "), value, startDate, endDate};
+    BigDecimal bd = new BigDecimal(value);
+    bd = bd.setScale(3, RoundingMode.HALF_UP);
+
+    Object[] toFormat = {formattedDate.replaceFirst("0", "").replaceAll("-", " "), bd.toPlainString(), startDate, endDate};
     String tweet = tweetFormat.format(toFormat);
 
     List<DatapointModelScore> scoresList = fluDetectorScores.getScoresForLast30Days(endDate);
