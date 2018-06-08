@@ -15,6 +15,7 @@
   <properties>
     <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <junit.exclude>pngfile</junit.exclude>
     <version.javaee-api>8.0</version.javaee-api>
     <version.jfreechart>1.5.0</version.jfreechart>
     <version.junit>5.2.0</version.junit>
@@ -132,6 +133,11 @@
             <version>${version.junit-surefire}</version>
           </dependency>
         </dependencies>
+        <configuration>
+          <properties>
+            <excludeTags>${junit.exclude}</excludeTags>
+          </properties>
+        </configuration>
       </plugin>
     </plugins>
   </build>

@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import javax.enterprise.context.Dependent;
 import javax.imageio.ImageIO;
 import javax.inject.Inject;
@@ -33,7 +34,7 @@ public class MessageParser {
   private PlotModelScore plotModelScore;
 
   private final MessageFormat tweetFormat = new MessageFormat(
-          "Based on Google searches, the estimated flu (Influenza-like illness) rate for England on {0} is {1} cases per 100,000 people https://fludetector.cs.ucl.ac.uk/?start={2}&end={3}&resolution=day&smoothing=0&model_regions-0=7-e #health #AI");
+          "Based on Google searches, the estimated flu (Influenza-like illness) rate for England on {0} is {1} cases per 100,000 people with an average 7-day {2} rate of {3}% compared to the previous 7-day period https://fludetector.cs.ucl.ac.uk/?start={4}&end={5}&resolution=day&smoothing=0&model_regions-0=7-e #health #AI");
 
   public TweetData getTweetData(String message) {
     Properties properties = PropertyReader.readProperties(message)
@@ -52,17 +53,30 @@ public class MessageParser {
 
     LocalDate endDate = LocalDate.parse(date);
     LocalDate startDate = LocalDate.parse(date).minusMonths(1);
-    String formattedDate = endDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(Locale.UK));
+    String formattedDate = endDate
+            .format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(Locale.UK))
+            .replaceFirst("^0", "").replaceAll("-", " ");
 
     BigDecimal bd = new BigDecimal(value);
     bd = bd.setScale(3, RoundingMode.HALF_UP);
 
-    Object[] toFormat = {formattedDate.replaceFirst("0", "").replaceAll("-", " "), bd.toPlainString(), startDate, endDate};
-    String tweet = tweetFormat.format(toFormat);
-
     List<DatapointModelScore> scoresList = fluDetectorScores.getScoresForLast30Days(endDate);
 
     BufferedImage chart = plotModelScore.createLineChart(scoresList);
+
+    List<Double> scores = scoresList.stream()
+            .map((DatapointModelScore s) -> s.getScoreValue())
+            .collect(Collectors.toList());
+    Double p = RateCalculator.averageChangeRate.apply(scores);
+    String variation = "variation";
+    if (p > 0) {
+      variation = "increase";
+    } else if (p < 0) {
+      variation = "decrease";
+    }
+
+    Object[] toFormat = {formattedDate, bd.toPlainString(), variation, Math.abs(p * 100), startDate, endDate};
+    String tweet = tweetFormat.format(toFormat);
 
     return new TweetData(tweet, chart);
   }
