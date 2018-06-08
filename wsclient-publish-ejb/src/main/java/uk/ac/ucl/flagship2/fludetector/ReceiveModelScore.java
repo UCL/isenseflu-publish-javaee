@@ -16,7 +16,8 @@ import javax.jms.TextMessage;
  * @author David Guzman <d.guzman at ucl.ac.uk>
  */
 @MessageDriven(activationConfig = {
-  @ActivationConfigProperty(propertyName = "destinationLookup", propertyValue = "jms/PubModelScoreQ"),
+  @ActivationConfigProperty(propertyName = "destinationLookup", propertyValue = "jms/PubModelScoreQ")
+  ,
   @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue")
 })
 public class ReceiveModelScore implements MessageListener {
@@ -51,7 +52,7 @@ public class ReceiveModelScore implements MessageListener {
       throw new IllegalArgumentException("Message must be of type TextMessage or ByteMessage");
     }
     if (!out.isEmpty()) {
-      callScheduler.setLastModelScore(out.replaceAll("[\n\r]", ""));
+      callScheduler.setLastModelScore(out);
       try {
         Logger.getLogger(ReceiveModelScore.class.getName()).log(Level.INFO, "JMS Message ID {0} has been read and sent to PublishModelScore", msg.getJMSMessageID());
       } catch (JMSException ex) {

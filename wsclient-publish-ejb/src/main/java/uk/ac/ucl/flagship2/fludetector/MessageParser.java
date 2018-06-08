@@ -44,11 +44,11 @@ public class MessageParser {
     String value = properties.getProperty("value", "");
 
     if (date.isEmpty() || !date.matches("^\\d{4}-\\d{2}-\\d{2}$")) {
-      throw new IllegalArgumentException("Date field not provided or date not in ISO format");
+      throw new IllegalArgumentException("Date field not provided or date not in ISO format: date is " + date);
     }
 
     if (value.isEmpty() || !value.matches("\\d+(\\.\\d+)?")) {
-      throw new IllegalArgumentException("Score value not provided or score value not a number");
+      throw new IllegalArgumentException("Score value not provided or score value not a number: value is " + value);
     }
 
     LocalDate endDate = LocalDate.parse(date);

@@ -1,6 +1,8 @@
 package uk.ac.ucl.flagship2.fludetector;
 
+import java.util.logging.Logger;
 import java.io.IOException;
+import java.util.logging.Level;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
@@ -108,6 +110,7 @@ public class PublishModelScore {
 
     OkOrThrow(updateInvocationBuilder.post(entForm));
 
+    Logger.getLogger(PublishModelScore.class.getName()).log(Level.INFO, "Tweet published");
   }
 
   private Response OkOrThrow(Response response) {
