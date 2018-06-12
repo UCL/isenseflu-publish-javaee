@@ -58,6 +58,12 @@ public class ReceiveModelScore implements MessageListener {
       } catch (JMSException ex) {
         Logger.getLogger(ReceiveModelScore.class.getName()).log(Level.SEVERE, null, ex);
       }
+    } else {
+      try {
+        Logger.getLogger(ReceiveModelScore.class.getName()).log(Level.WARNING, "JMS Message ID {0} is empty", msg.getJMSMessageID());
+      } catch (JMSException ex) {
+        Logger.getLogger(ReceiveModelScore.class.getName()).log(Level.SEVERE, null, ex);
+      }
     }
   }
 }
