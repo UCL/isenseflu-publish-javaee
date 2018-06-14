@@ -17,6 +17,19 @@
     <version.maven-ear-plugin>3.0.1</version.maven-ear-plugin>
   </properties>
 
+  <dependencies>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>wsclient-publish-ejb</artifactId>
+      <version>${project.version}</version>
+      <type>ejb</type>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.jersey.security</groupId>
+      <artifactId>oauth1-client</artifactId>
+    </dependency>
+  </dependencies>
+
   <build>
     <plugins>
       <plugin>
@@ -30,16 +43,5 @@
       </plugin>
     </plugins>
   </build>
-  <dependencies>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>wsclient-publish-ejb</artifactId>
-      <version>${project.version}</version>
-      <type>ejb</type>
-    </dependency>
-    <dependency>
-      <groupId>org.glassfish.jersey.security</groupId>
-      <artifactId>oauth1-client</artifactId>
-    </dependency>
-  </dependencies>
+
 </project>
