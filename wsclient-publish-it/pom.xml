@@ -13,14 +13,22 @@
   <name>wsclient-publish-it</name>
 
   <properties>
+    <version.glassfish>5.0</version.glassfish>
     <version.maven-failsafe-plugin>2.21.0</version.maven-failsafe-plugin>
     <version.maven-jar-plugin>3.1.0</version.maven-jar-plugin>
+    <version.maven-dependency-plugin>3.1.1</version.maven-dependency-plugin>
   </properties>
 
   <dependencies>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.main.extras</groupId>
+      <artifactId>glassfish-embedded-all</artifactId>
+      <version>${version.glassfish}</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 
@@ -44,6 +52,36 @@
               <goal>integration-test</goal>
               <goal>verify</goal>
             </goals>
+            <configuration>
+              <systemPropertyVariables>
+                <app>${project.build.directory}/wsclient-publish-ear-${project.version}.ear</app>
+                <derby.stream.error.file>${project.build.directory}/derby.log</derby.stream.error.file>
+              </systemPropertyVariables>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>${version.maven-dependency-plugin}</version>
+        <executions>
+          <execution>
+            <phase>pre-integration-test</phase>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>${project.groupId}</groupId>
+                  <artifactId>wsclient-publish-ear</artifactId>
+                  <version>${project.version}</version>
+                  <type>ear</type>
+                </artifactItem>
+              </artifactItems>
+              <outputDirectory>${project.build.directory}</outputDirectory>
+            </configuration>
           </execution>
         </executions>
       </plugin>
