@@ -27,6 +27,10 @@ import javax.inject.Inject;
 @Dependent
 public class MessageParser {
 
+  private final String firstSuffix = "st of ";
+  private final String secondSuffix = "nd of ";
+  private final String thirdSuffix = "rd of ";
+
   @Inject
   private FluDetectorScores fluDetectorScores;
 
@@ -57,13 +61,17 @@ public class MessageParser {
     int day = endDate.getDayOfMonth();
     switch (day) {
       case 1:
-        ordinal = "st of ";
+      case 21:
+      case 31:
+        ordinal = firstSuffix;
         break;
       case 2:
-        ordinal = "nd of ";
+      case 22:
+        ordinal = secondSuffix;
         break;
       case 3:
-        ordinal = "rd of ";
+      case 23:
+        ordinal = thirdSuffix;
         break;
       default:
         break;
