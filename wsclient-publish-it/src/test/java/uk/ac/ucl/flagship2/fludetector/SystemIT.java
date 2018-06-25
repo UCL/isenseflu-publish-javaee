@@ -8,6 +8,7 @@ import org.glassfish.embeddable.GlassFish;
 import org.glassfish.embeddable.GlassFishException;
 import org.glassfish.embeddable.GlassFishProperties;
 import org.glassfish.embeddable.GlassFishRuntime;
+//import org.mockserver.integration.ClientAndServer;
 
 /**
  *
@@ -18,9 +19,11 @@ public class SystemIT {
   private GlassFish glassfish;
   private CommandRunner commandRunner;
   private CommandResult run;
+//  private ClientAndServer mockServer;
 
   public void testAsetup() throws GlassFishException {
     System.out.println("BeforeAll");
+//    mockServer = ClientAndServer.startClientAndServer(1080);
     glassfish = GlassFishRuntime.bootstrap().newGlassFish();
     glassfish.start();
     commandRunner = glassfish.getCommandRunner();
@@ -41,6 +44,7 @@ public class SystemIT {
 
   public void testZteardown() throws GlassFishException {
     glassfish.stop();
+//    mockServer.stop();
   }
 
 }

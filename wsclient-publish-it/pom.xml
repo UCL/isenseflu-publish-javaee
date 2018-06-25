@@ -44,6 +44,55 @@
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>${version.maven-dependency-plugin}</version>
+        <executions>
+          <execution>
+            <id>copy-ear</id>
+            <phase>pre-integration-test</phase>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>${project.groupId}</groupId>
+                  <artifactId>wsclient-publish-ear</artifactId>
+                  <version>${project.version}</version>
+                  <type>ear</type>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.glassfish.main.distributions</groupId>
+                  <artifactId>glassfish</artifactId>
+                  <version>5.0</version>
+                  <type>zip</type>
+                </artifactItem>
+              </artifactItems>
+              <outputDirectory>${project.build.directory}</outputDirectory>
+            </configuration>
+          </execution>
+          <execution>
+            <id>download-glassfish</id>
+            <phase>pre-integration-test</phase>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>org.glassfish.main.distributions</groupId>
+                  <artifactId>glassfish</artifactId>
+                  <version>5.0</version>
+                  <type>zip</type>
+                </artifactItem>
+              </artifactItems>
+              <outputDirectory>${project.build.directory}</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-failsafe-plugin</artifactId>
         <version>${version.maven-failsafe-plugin}</version>
         <executions>
@@ -57,30 +106,6 @@
                 <app>${project.build.directory}/wsclient-publish-ear-${project.version}.ear</app>
                 <derby.stream.error.file>${project.build.directory}/derby.log</derby.stream.error.file>
               </systemPropertyVariables>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <version>${version.maven-dependency-plugin}</version>
-        <executions>
-          <execution>
-            <phase>pre-integration-test</phase>
-            <goals>
-              <goal>copy</goal>
-            </goals>
-            <configuration>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>${project.groupId}</groupId>
-                  <artifactId>wsclient-publish-ear</artifactId>
-                  <version>${project.version}</version>
-                  <type>ear</type>
-                </artifactItem>
-              </artifactItems>
-              <outputDirectory>${project.build.directory}</outputDirectory>
             </configuration>
           </execution>
         </executions>
