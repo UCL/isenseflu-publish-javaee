@@ -32,8 +32,8 @@ import org.jfree.data.time.TimeSeriesCollection;
 @Dependent
 public class PlotModelScore {
 
-  private final static int WIDTH = 800;
-  private final static int HEIGHT = 400;
+  private final static int WIDTH = 1024;
+  private final static int HEIGHT = 512;
   private final String TITLE = "Daily flu (influenza-like illness) rates for England";
   private final String SERIES = "Google v2.018.04/England";
   private final String XLABEL = "Date";
@@ -43,11 +43,12 @@ public class PlotModelScore {
   private final TimeSeriesCollection dataset = new TimeSeriesCollection();
   private final XYItemRenderer renderer = new XYSplineRenderer(6);
 
-  private final Font titleFont = new Font("Verdana", Font.TRUETYPE_FONT, 16);
-  private final Font axisFont = new Font("Verdana", Font.TRUETYPE_FONT, 14);
+  private final Font titleFont = new Font("Verdana", Font.TRUETYPE_FONT, 22);
+  private final Font axisFont = new Font("Verdana", Font.TRUETYPE_FONT, 20);
+  private final Font tickFont = new Font("Verdana", Font.TRUETYPE_FONT, 18);
 
   private final Paint lineColour = new Color(51, 102, 204);
-  private final Stroke lineStroke = new BasicStroke(2);
+  private final Stroke lineStroke = new BasicStroke(3);
   private final Shape lineShape = new Ellipse2D.Double();
   private final DateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy");
 
@@ -86,12 +87,14 @@ public class PlotModelScore {
 
     DateAxis dateAxis = (DateAxis) plot.getDomainAxis();
     dateAxis.setDateFormatOverride(dateFormat);
-    dateAxis.setUpperMargin(0.05);
+    dateAxis.setUpperMargin(0.1);
     dateAxis.setLabelFont(axisFont);
+    dateAxis.setTickLabelFont(tickFont);
 
     ValueAxis valueAxis = plot.getRangeAxis();
     valueAxis.setLowerBound(0);
     valueAxis.setLabelFont(axisFont);
+    valueAxis.setTickLabelFont(tickFont);
 
     chart.removeLegend();
 

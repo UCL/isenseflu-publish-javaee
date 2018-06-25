@@ -37,9 +37,9 @@ public class PlotModelScoreTest extends DataStubs {
   public void testCreateLineChart() {
     BufferedImage bufferedImage = instance.createLineChart(DATAPOINTS);
     Assertions.assertAll("parameters", () -> {
-      Assertions.assertEquals(800, bufferedImage.getWidth());
-      Assertions.assertEquals(400, bufferedImage.getHeight());
-      Assertions.assertEquals(320000, bufferedImage.getData().getDataBuffer().getSize());
+      Assertions.assertEquals(1024, bufferedImage.getWidth());
+      Assertions.assertEquals(512, bufferedImage.getHeight());
+      Assertions.assertEquals(524288, bufferedImage.getData().getDataBuffer().getSize());
     });
   }
 
