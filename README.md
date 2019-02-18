@@ -1,4 +1,6 @@
-# wsclient-publish
+# isenseflu-publish-javaee
+
+i-sense flu component for publishing scores on social media
 
 ## JRE version
 
