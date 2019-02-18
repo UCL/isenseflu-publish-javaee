@@ -3,3 +3,7 @@ target/
 
 .DS_Store
 *.png
+
+# IntelliJ IDEA
+*.iml
+.idea/
