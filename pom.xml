@@ -2,20 +2,20 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>uk.ac.ucl.flagship2.fludetector</groupId>
-  <artifactId>wsclient-publish</artifactId>
+  <artifactId>isenseflu-publish</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
-  <name>wsclient-publish</name>
+  <name>isenseflu-publish</name>
   <modules>
-    <module>wsclient-publish-ear</module>
-    <module>wsclient-publish-ejb</module>
-    <module>wsclient-publish-it</module>
+    <module>isenseflu-publish-ear</module>
+    <module>isenseflu-publish-ejb</module>
+    <module>isenseflu-publish-it</module>
   </modules>
   <properties>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <version.jersey>2.27</version.jersey>
+    <version.jersey>2.28</version.jersey>
     <version.junit-jupiter>5.2.0</version.junit-jupiter>
   </properties>
   <dependencyManagement>
