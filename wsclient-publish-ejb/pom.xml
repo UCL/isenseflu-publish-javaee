@@ -23,7 +23,7 @@
     <version.maven-compiler-plugin>3.8.0</version.maven-compiler-plugin>
     <version.maven-ejb-plugin>3.0.1</version.maven-ejb-plugin>
     <version.maven-dependency-plugin>3.1.1</version.maven-dependency-plugin>
-    <version.maven-surefire-plugin>2.21.0</version.maven-surefire-plugin>
+    <version.maven-surefire-plugin>2.22.1</version.maven-surefire-plugin>
   </properties>
 
   <dependencies>
