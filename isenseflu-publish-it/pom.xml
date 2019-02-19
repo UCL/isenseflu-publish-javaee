@@ -2,15 +2,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <artifactId>wsclient-publish</artifactId>
+    <artifactId>isenseflu-publish</artifactId>
     <groupId>uk.ac.ucl.flagship2.fludetector</groupId>
     <version>1.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>wsclient-publish-it</artifactId>
+  <artifactId>isenseflu-publish-it</artifactId>
   <packaging>jar</packaging>
 
-  <name>wsclient-publish-it</name>
+  <name>isenseflu-publish-it</name>
 
   <properties>
     <version.glassfish>5.1.0</version.glassfish>
@@ -103,7 +103,7 @@
             </goals>
             <configuration>
               <systemPropertyVariables>
-                <app>${project.build.directory}/wsclient-publish-ear-${project.version}.ear</app>
+                <app>${project.build.directory}/isenseflu-publish-ear-${project.version}.ear</app>
                 <derby.stream.error.file>${project.build.directory}/derby.log</derby.stream.error.file>
               </systemPropertyVariables>
             </configuration>
