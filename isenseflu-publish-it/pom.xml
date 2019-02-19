@@ -57,7 +57,7 @@
               <artifactItems>
                 <artifactItem>
                   <groupId>${project.groupId}</groupId>
-                  <artifactId>wsclient-publish-ear</artifactId>
+                  <artifactId>isenseflu-publish-ear</artifactId>
                   <version>${project.version}</version>
                   <type>ear</type>
                 </artifactItem>
