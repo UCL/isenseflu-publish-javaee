@@ -1,4 +1,4 @@
-package uk.ac.ucl.flagship2.fludetector;
+package uk.ac.ucl.isenseflu.publish;
 
 import java.nio.charset.StandardCharsets;
 import javax.jms.BytesMessage;
@@ -11,6 +11,8 @@ import mockit.Mocked;
 import mockit.Tested;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import uk.ac.ucl.isenseflu.publish.CallScheduler;
+import uk.ac.ucl.isenseflu.publish.ReceiveModelScore;
 
 /**
  *

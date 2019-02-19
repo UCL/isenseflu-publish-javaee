@@ -1,4 +1,4 @@
-package uk.ac.ucl.flagship2.fludetector;
+package uk.ac.ucl.isenseflu.publish;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -15,6 +15,8 @@ import mockit.Injectable;
 import mockit.Mocked;
 import mockit.Tested;
 import org.junit.jupiter.api.Test;
+import uk.ac.ucl.isenseflu.publish.MessageParser;
+import uk.ac.ucl.isenseflu.publish.PublishModelScore;
 
 /**
  *

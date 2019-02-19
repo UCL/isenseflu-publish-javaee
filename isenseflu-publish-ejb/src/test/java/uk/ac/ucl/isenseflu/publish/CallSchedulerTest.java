@@ -1,4 +1,4 @@
-package uk.ac.ucl.flagship2.fludetector;
+package uk.ac.ucl.isenseflu.publish;
 
 import java.time.LocalDate;
 import java.util.concurrent.atomic.AtomicReferenceArray;
@@ -8,6 +8,8 @@ import mockit.Tested;
 import mockit.Verifications;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import uk.ac.ucl.isenseflu.publish.CallScheduler;
+import uk.ac.ucl.isenseflu.publish.PublishModelScore;
 
 /**
  *

@@ -1,4 +1,4 @@
-package uk.ac.ucl.flagship2.fludetector;
+package uk.ac.ucl.isenseflu.publish;
 
 import java.awt.image.BufferedImage;
 import java.io.File;

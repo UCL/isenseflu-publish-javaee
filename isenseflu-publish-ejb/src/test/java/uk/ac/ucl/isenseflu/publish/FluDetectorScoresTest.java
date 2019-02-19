@@ -1,4 +1,4 @@
-package uk.ac.ucl.flagship2.fludetector;
+package uk.ac.ucl.isenseflu.publish;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -16,6 +16,8 @@ import mockit.Mocked;
 import mockit.Tested;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import uk.ac.ucl.isenseflu.publish.DatapointModelScore;
+import uk.ac.ucl.isenseflu.publish.FluDetectorScores;
 
 /**
  *

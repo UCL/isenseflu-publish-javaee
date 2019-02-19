@@ -1,4 +1,4 @@
-package uk.ac.ucl.flagship2.fludetector;
+package uk.ac.ucl.isenseflu.publish;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -12,7 +12,6 @@ import mockit.Tested;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import static uk.ac.ucl.flagship2.fludetector.DataStubs.SCORES;
 
 /**
  *

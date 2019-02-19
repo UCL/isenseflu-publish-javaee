@@ -1,4 +1,4 @@
-package uk.ac.ucl.flagship2.fludetector;
+package uk.ac.ucl.isenseflu.publish;
 
 import java.time.LocalDate;
 import java.util.concurrent.atomic.AtomicReference;

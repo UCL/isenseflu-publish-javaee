@@ -1,4 +1,4 @@
-package uk.ac.ucl.flagship2.fludetector;
+package uk.ac.ucl.isenseflu.publish;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -24,6 +24,7 @@ import org.jfree.data.time.Day;
 import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
+import uk.ac.ucl.isenseflu.publish.DatapointModelScore;
 
 /**
  *
