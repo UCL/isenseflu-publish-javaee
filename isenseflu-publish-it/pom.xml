@@ -14,10 +14,28 @@
 
   <properties>
     <version.glassfish>5.1.0</version.glassfish>
+    <version.grizzly-bootstrap>1.9</version.grizzly-bootstrap>
+    <version.gozirra>0.4.1</version.gozirra>
     <version.maven-failsafe-plugin>2.22.1</version.maven-failsafe-plugin>
     <version.maven-jar-plugin>3.1.1</version.maven-jar-plugin>
     <version.maven-dependency-plugin>3.1.1</version.maven-dependency-plugin>
+    <glassfish-embedded-static-shell.jar>
+      ${project.build.directory}/glassfish5/glassfish/lib/embedded/glassfish-embedded-static-shell.jar
+    </glassfish-embedded-static-shell.jar>
   </properties>
+
+  <repositories>
+    <repository>
+      <id>maven-repo</id>
+      <name>Maven Central Repository</name>
+      <url>http://uk.maven.org/maven2/</url>
+    </repository>
+    <repository>
+      <id>spring-repo</id>
+      <name>Spring Plugins Repository</name>
+      <url>	http://repo.spring.io/plugins-release/</url>
+    </repository>
+  </repositories>
 
   <dependencies>
     <dependency>
@@ -25,9 +43,20 @@
       <artifactId>junit-jupiter-api</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.glassfish.main.extras</groupId>
-      <artifactId>glassfish-embedded-all</artifactId>
+      <groupId>org.glassfish.main.common</groupId>
+      <artifactId>simple-glassfish-api</artifactId>
       <version>${version.glassfish}</version>
+    </dependency>
+    <dependency>
+      <groupId>net.ser1</groupId>
+      <artifactId>gozirra-client</artifactId>
+      <version>${version.gozirra}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.grizzly</groupId>
+      <artifactId>grizzly-npn-bootstrap</artifactId>
+      <version>${version.grizzly-bootstrap}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -82,11 +111,34 @@
                 <artifactItem>
                   <groupId>org.glassfish.main.distributions</groupId>
                   <artifactId>glassfish</artifactId>
-                  <version>5.0</version>
+                  <version>5.1.0</version>
                   <type>zip</type>
                 </artifactItem>
               </artifactItems>
               <outputDirectory>${project.build.directory}</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>3.1.0</version>
+        <executions>
+          <execution>
+            <id>copy-domain-xml</id>
+            <phase>pre-integration-test</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/glassfish5/glassfish/domains/domain1/config</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>${project.basedir}/src/test/resources</directory>
+                </resource>
+              </resources>
+              <overwrite>true</overwrite>
             </configuration>
           </execution>
         </executions>
@@ -102,7 +154,11 @@
               <goal>verify</goal>
             </goals>
             <configuration>
+              <additionalClasspathElements>
+                <additionalClasspathElement>${glassfish-embedded-static-shell.jar}</additionalClasspathElement>
+              </additionalClasspathElements>
               <systemPropertyVariables>
+                <gfroot>${project.build.directory}/glassfish5</gfroot>
                 <app>${project.build.directory}/isenseflu-publish-ear-${project.version}.ear</app>
                 <derby.stream.error.file>${project.build.directory}/derby.log</derby.stream.error.file>
               </systemPropertyVariables>
