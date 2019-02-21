@@ -46,9 +46,6 @@
     </jdbc-connection-pool>
     <connector-connection-pool resource-adapter-name="jmsra" max-pool-size="250" steady-pool-size="1" name="jms/__defaultConnectionFactory-Connection-Pool" connection-definition-name="javax.jms.ConnectionFactory"></connector-connection-pool>
     <connector-resource pool-name="jms/__defaultConnectionFactory-Connection-Pool" object-type="system-all-req" jndi-name="jms/__defaultConnectionFactory"></connector-resource>
-    <admin-object-resource res-adapter="jmsra" res-type="javax.jms.Queue" jndi-name="jms/PubModelScoreQ">
-      <property name="Name" value="PubModelScore.Q"/>
-    </admin-object-resource>
   </resources>
   <servers>
     <server config-ref="server-config" name="server">
@@ -56,7 +53,6 @@
       <resource-ref ref="jdbc/__TimerPool"></resource-ref>
       <resource-ref ref="jdbc/__default"></resource-ref>
       <resource-ref ref="jms/__defaultConnectionFactory"></resource-ref>
-      <resource-ref ref="jms/PubModelScoreQ"/>
     </server>
   </servers>
   <nodes>
@@ -91,6 +87,7 @@
       <transaction-service tx-log-dir="${com.sun.aas.instanceRoot}/logs"></transaction-service>
       <batch-runtime-configuration></batch-runtime-configuration>
       <jms-service default-jms-host="default_JMS_host" type="LOCAL">
+        <property name="imq.jmsra.managed" value="true"></property>
         <property name="imq.bridge.enabled" value="true"></property>
         <property name="imq.bridge.admin.user" value="admin"></property>
         <property name="imq.bridge.admin.password" value="admin"></property>
