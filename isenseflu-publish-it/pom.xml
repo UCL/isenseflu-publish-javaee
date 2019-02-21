@@ -158,7 +158,7 @@
                 <additionalClasspathElement>${glassfish-embedded-static-shell.jar}</additionalClasspathElement>
               </additionalClasspathElements>
               <systemPropertyVariables>
-                <gfroot>${project.build.directory}/glassfish5</gfroot>
+                <gfroot>${project.build.directory}/glassfish5/glassfish</gfroot>
                 <app>${project.build.directory}/isenseflu-publish-ear-${project.version}.ear</app>
                 <derby.stream.error.file>${project.build.directory}/derby.log</derby.stream.error.file>
               </systemPropertyVariables>
