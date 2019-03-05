@@ -32,7 +32,7 @@ public class MessageParser {
   private final String thirdSuffix = "rd of ";
 
   @Inject
-  private FluDetectorScores fluDetectorScores;
+  private FetchScores fluDetectorScores;
 
   @Inject
   private PlotModelScore plotModelScore;

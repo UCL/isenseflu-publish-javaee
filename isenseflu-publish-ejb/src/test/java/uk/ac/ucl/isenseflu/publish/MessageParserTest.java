@@ -25,7 +25,7 @@ public class MessageParserTest extends DataStubs {
   MessageParser instance;
 
   @Injectable
-  FluDetectorScores fluDetectorScores;
+  FetchScores fluDetectorScores;
 
   @Injectable
   PlotModelScore plotModelScore;
