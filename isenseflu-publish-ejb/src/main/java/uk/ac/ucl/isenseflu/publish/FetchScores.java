@@ -20,7 +20,7 @@ import javax.ws.rs.core.Response;
 @LocalBean
 public class FetchScores {
 
-  private final String SCORES_URI = "https://fludetector.cs.ucl.ac.uk/api/scores/";
+  private final String SCORES_URI = "https://fludetector.cs.ucl.ac.uk/api/scores";
   private final Client client = ClientBuilder.newClient();
 
   public List<DatapointModelScore> getScoresForLast30Days(LocalDate localDate) {
