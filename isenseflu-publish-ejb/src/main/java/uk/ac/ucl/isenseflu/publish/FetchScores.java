@@ -14,12 +14,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
- *
  * @author David Guzman
  */
 @Stateless
 @LocalBean
-public class FluDetectorScores {
+public class FetchScores {
 
   private final String SCORES_URI = "https://fludetector.cs.ucl.ac.uk/api/scores/";
   private final Client client = ClientBuilder.newClient();
@@ -29,14 +28,13 @@ public class FluDetectorScores {
     String endDate = localDate.toString();
 
     final Response response = client.target(SCORES_URI)
-            .queryParam("model", "7")
-            .queryParam("region", "e")
-            .queryParam("start", startDate)
-            .queryParam("end", endDate)
-            .queryParam("resolution", "day")
-            .queryParam("smoothing", "0")
-            .request(MediaType.APPLICATION_JSON_TYPE)
-            .get();
+      .queryParam("id", "2")
+      .queryParam("startDate", startDate)
+      .queryParam("endDate", endDate)
+      .queryParam("resolution", "day")
+      .queryParam("smoothing", "0")
+      .request(MediaType.APPLICATION_JSON_TYPE)
+      .get();
 
     if (response.getStatus() != Response.Status.OK.getStatusCode()) {
       client.close();
@@ -44,16 +42,19 @@ public class FluDetectorScores {
     }
 
     JsonArray jsonArray = response.readEntity(JsonObject.class)
-            .getJsonArray("scores");
+      .getJsonArray("modeldata");
 
-    List<DatapointModelScore> datapoints = jsonArray.stream()
-            .filter(o -> o instanceof JsonObject)
-            .map(o -> (JsonObject) o)
-            .map((JsonObject jsonObject) -> {
-              LocalDate date = LocalDate.parse(jsonObject.getString("date"));
-              Double value = jsonObject.getJsonNumber("score").doubleValue();
-              return new DatapointModelScore(date, value);
-            }).collect(Collectors.toList());
+    List<DatapointModelScore> datapoints = jsonArray
+      .getJsonObject(0)
+      .getJsonArray("datapoints")
+      .stream()
+      .filter(o -> o instanceof JsonObject)
+      .map(o -> (JsonObject) o)
+      .map((JsonObject jsonObject) -> {
+        LocalDate date = LocalDate.parse(jsonObject.getString("score_date"));
+        Double value = jsonObject.getJsonNumber("score_value").doubleValue();
+        return new DatapointModelScore(date, value);
+      }).collect(Collectors.toList());
 
     return datapoints;
   }

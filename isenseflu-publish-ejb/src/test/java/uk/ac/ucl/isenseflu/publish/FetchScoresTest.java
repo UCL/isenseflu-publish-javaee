@@ -10,23 +10,21 @@ import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
 import mockit.Deencapsulation;
 import mockit.Expectations;
 import mockit.Mocked;
 import mockit.Tested;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import uk.ac.ucl.isenseflu.publish.DatapointModelScore;
-import uk.ac.ucl.isenseflu.publish.FluDetectorScores;
 
 /**
- *
  * @author David Guzman
  */
-public class FluDetectorScoresTest {
+public class FetchScoresTest {
 
   @Tested
-  FluDetectorScores instance;
+  FetchScores instance;
 
   @Mocked
   Client client;
@@ -48,13 +46,22 @@ public class FluDetectorScoresTest {
     Deencapsulation.setField(instance, "client", client);
     LocalDate localDate = LocalDate.now().minusDays(3);
     JsonArray scoresArray = Json.createArrayBuilder()
-            .add(Json.createObjectBuilder()
-                    .add("date", localDate.toString())
-                    .add("score", 123.4d))
-            .add(Json.createObjectBuilder()
-                    .add("date", localDate.minusDays(1).toString())
-                    .add("score", 567.8d))
-            .build();
+      .add(Json.createObjectBuilder()
+        .add("score_date", localDate.toString())
+        .add("score_value", 123.4d))
+      .add(Json.createObjectBuilder()
+        .add("score_date", localDate.minusDays(1).toString())
+        .add("score_value", 567.8d))
+      .build();
+    JsonArray modelDataArray = Json.createArrayBuilder()
+      .add(
+        Json.createObjectBuilder()
+          .add("id", 1)
+          .add("name", "Model name")
+          .add("datapoints", scoresArray)
+          .build()
+      )
+      .build();
 
     new Expectations() {
       {
@@ -76,8 +83,8 @@ public class FluDetectorScoresTest {
         response.readEntity(JsonObject.class);
         result = jsonObject;
 
-        jsonObject.getJsonArray("scores");
-        result = scoresArray;
+        jsonObject.getJsonArray("modeldata");
+        result = modelDataArray;
       }
     };
     List<DatapointModelScore> scoresList = instance.getScoresForLast30Days(localDate);
