@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-import mockit.Deencapsulation;
 import mockit.Expectations;
 import mockit.Injectable;
 import mockit.Tested;
@@ -21,14 +20,14 @@ public class MessageParserTest extends DataStubs {
 
   private static final List<DatapointModelScore> DATAPOINTS = new ArrayList<>();
 
-  @Tested
-  MessageParser instance;
-
   @Injectable
   FetchScores fluDetectorScores;
 
   @Injectable
   PlotModelScore plotModelScore;
+
+  @Tested
+  MessageParser instance;
 
   @BeforeAll
   public static void populateDatapoints() {
@@ -40,8 +39,6 @@ public class MessageParserTest extends DataStubs {
 
   @Test
   public void testGetTweetData() {
-    Deencapsulation.setField(instance, "fluDetectorScores", fluDetectorScores);
-    Deencapsulation.setField(instance, "plotModelScore", plotModelScore);
     new Expectations() {
       {
         fluDetectorScores.getScoresForLast30Days(LocalDate.of(2018, 5, 20));
@@ -56,8 +53,6 @@ public class MessageParserTest extends DataStubs {
 
   @Test
   public void testGetTweetDataDates() {
-    Deencapsulation.setField(instance, "fluDetectorScores", fluDetectorScores);
-    Deencapsulation.setField(instance, "plotModelScore", plotModelScore);
     new Expectations() {
       {
         fluDetectorScores.getScoresForLast30Days(withInstanceOf(LocalDate.class));

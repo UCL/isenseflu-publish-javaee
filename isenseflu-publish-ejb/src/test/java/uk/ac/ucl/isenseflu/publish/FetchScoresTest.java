@@ -6,12 +6,11 @@ import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import mockit.Deencapsulation;
 import mockit.Expectations;
 import mockit.Mocked;
 import mockit.Tested;
@@ -23,8 +22,8 @@ import org.junit.jupiter.api.Test;
  */
 public class FetchScoresTest {
 
-  @Tested
-  FetchScores instance;
+  @Mocked
+  ClientBuilder clientBuilder;
 
   @Mocked
   Client client;
@@ -38,12 +37,11 @@ public class FetchScoresTest {
   @Mocked
   Response response;
 
-  @Mocked
-  JsonObject jsonObject;
+  @Tested
+  FetchScores instance;
 
   @Test
   public void testParsingOfJsonArray() {
-    Deencapsulation.setField(instance, "client", client);
     LocalDate localDate = LocalDate.now().minusDays(3);
     JsonArray scoresArray = Json.createArrayBuilder()
       .add(Json.createObjectBuilder()
@@ -62,32 +60,22 @@ public class FetchScoresTest {
           .build()
       )
       .build();
+    JsonObject jsonObject = Json.createObjectBuilder()
+      .add("modeldata", modelDataArray)
+      .build();
 
     new Expectations() {
       {
-        client.target(anyString);
-        result = webTarget;
-
-        webTarget.queryParam(anyString, anyString);
-        result = webTarget;
-
-        webTarget.request(MediaType.APPLICATION_JSON_TYPE);
-        result = invocationBuilder;
-
-        invocationBuilder.get();
-        result = response;
-
         response.getStatus();
         result = 200;
 
         response.readEntity(JsonObject.class);
         result = jsonObject;
-
-        jsonObject.getJsonArray("modeldata");
-        result = modelDataArray;
       }
     };
+
     List<DatapointModelScore> scoresList = instance.getScoresForLast30Days(localDate);
+    scoresList.stream().mapToDouble(o -> o.getScoreValue()).forEach(System.out::println);
     Assertions.assertEquals(2, scoresList.size());
   }
 

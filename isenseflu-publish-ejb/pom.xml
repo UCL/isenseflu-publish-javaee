@@ -18,8 +18,7 @@
     <junit.exclude>pngfile</junit.exclude>
     <version.javaee-api>8.0</version.javaee-api>
     <version.jfreechart>1.5.0</version.jfreechart>
-    <version.junit-surefire>1.2.0</version.junit-surefire>
-    <version.jmockit>1.39</version.jmockit>
+    <version.jmockit>1.46</version.jmockit>
     <version.maven-compiler-plugin>3.8.0</version.maven-compiler-plugin>
     <version.maven-ejb-plugin>3.0.1</version.maven-ejb-plugin>
     <version.maven-dependency-plugin>3.1.1</version.maven-dependency-plugin>
@@ -61,7 +60,7 @@
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-api</artifactId>
+      <artifactId>junit-jupiter</artifactId>
     </dependency>
     <dependency>
       <groupId>org.jmockit</groupId>
@@ -123,22 +122,13 @@
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>${version.maven-surefire-plugin}</version>
-        <dependencies>
-          <dependency>
-            <groupId>org.junit.platform</groupId>
-            <artifactId>junit-platform-surefire-provider</artifactId>
-            <version>${version.junit-surefire}</version>
-          </dependency>
-          <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>${version.junit-jupiter}</version>
-          </dependency>
-        </dependencies>
         <configuration>
           <properties>
             <excludeTags>${junit.exclude}</excludeTags>
           </properties>
+          <argLine>
+            -javaagent:${settings.localRepository}/org/jmockit/jmockit/${version.jmockit}/jmockit-${version.jmockit}.jar
+          </argLine>
         </configuration>
       </plugin>
     </plugins>

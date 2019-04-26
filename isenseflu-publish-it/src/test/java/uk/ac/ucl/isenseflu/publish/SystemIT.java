@@ -48,6 +48,22 @@ public class SystemIT {
     );
     System.out.println(run.getOutput());
 
+    run = commandRunner.run(
+      "list-log-attributes"
+    );
+    System.out.println(run.getOutput());
+
+    run = commandRunner.run(
+      "set-log-attributes",
+      "com.sun.enterprise.server.logging.GFFileHandler.logtoConsole=true"
+    );
+    System.out.println(run.getOutput());
+
+    run = commandRunner.run(
+      "set",
+      "configs.config.server-config.cdi-service.enable-implicit-cdi=false"
+    );
+
     File ear = new File(System.getProperty("app"));
     Deployer deployer = glassfish.getDeployer();
     deployer.deploy(ear);
@@ -56,9 +72,11 @@ public class SystemIT {
   public void testSystem() throws LoginException, IOException {
     System.out.println("=========================");
     System.out.println("System Test");
+    /*
     Client stompClient = new Client("localhost", 7672, "admin", "admin");
     stompClient.send("/queue/PubModelScore.Q", "date=2019-01-01\nvalue=0.123");
     stompClient.disconnect();
+    */
 
 
   }
