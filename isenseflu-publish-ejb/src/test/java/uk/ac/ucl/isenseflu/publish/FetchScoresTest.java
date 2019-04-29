@@ -1,10 +1,12 @@
 package uk.ac.ucl.isenseflu.publish;
 
+import java.io.StringReader;
 import java.time.LocalDate;
 import java.util.List;
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
+import javax.json.JsonReader;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Invocation;
@@ -16,6 +18,8 @@ import mockit.Mocked;
 import mockit.Tested;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static uk.ac.ucl.isenseflu.publish.DataStubs.JSON_RESPONSE;
 
 /**
  * @author David Guzman
@@ -39,6 +43,29 @@ public class FetchScoresTest {
 
   @Tested
   FetchScores instance;
+
+  @Test
+  public void testParsingFromJsonString() {
+    LocalDate localDate = LocalDate.of(2019, 4, 26);
+    JsonReader jsonParser = Json.createReader(new StringReader(JSON_RESPONSE));
+    JsonObject jsonObject = jsonParser.readObject();
+
+    new Expectations() {{
+      response.getStatus();
+      result = 200;
+
+      response.readEntity(JsonObject.class);
+      result = jsonObject;
+    }};
+
+    List<DatapointModelScore> scoresList = instance.getScoresForLast30Days(localDate);
+
+    Assertions.assertAll(
+      () -> Assertions.assertEquals(30, scoresList.size()),
+      () -> Assertions.assertEquals(5.8970798709844d, scoresList.get(0).getScoreValue()),
+      () -> Assertions.assertEquals(7.25593958395504d, scoresList.get(29).getScoreValue())
+    );
+  }
 
   @Test
   public void testParsingOfJsonArray() {
@@ -75,7 +102,6 @@ public class FetchScoresTest {
     };
 
     List<DatapointModelScore> scoresList = instance.getScoresForLast30Days(localDate);
-    scoresList.stream().mapToDouble(o -> o.getScoreValue()).forEach(System.out::println);
     Assertions.assertEquals(2, scoresList.size());
   }
 
