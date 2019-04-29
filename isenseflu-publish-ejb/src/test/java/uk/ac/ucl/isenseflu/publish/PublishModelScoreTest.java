@@ -6,17 +6,16 @@ import java.io.InputStream;
 import java.time.LocalDate;
 import javax.json.Json;
 import javax.json.JsonObject;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.core.Response;
-import mockit.Deencapsulation;
 import mockit.Expectations;
 import mockit.Injectable;
 import mockit.Mocked;
 import mockit.Tested;
 import org.junit.jupiter.api.Test;
-import uk.ac.ucl.isenseflu.publish.MessageParser;
-import uk.ac.ucl.isenseflu.publish.PublishModelScore;
 
 /**
  *
@@ -24,8 +23,11 @@ import uk.ac.ucl.isenseflu.publish.PublishModelScore;
  */
 public class PublishModelScoreTest {
 
-  @Tested
-  PublishModelScore instance;
+  @Mocked
+  ClientBuilder clientBuilder;
+
+  @Mocked
+  Client client;
 
   @Mocked
   Invocation.Builder invocationBuilder;
@@ -42,10 +44,11 @@ public class PublishModelScoreTest {
   @Injectable
   MessageParser messageParser;
 
+  @Tested
+  PublishModelScore instance;
+
   @Test
   public void testPublishScore() throws IOException {
-    Deencapsulation.setField(instance, "mediaInvocationBuilder", invocationBuilder);
-    Deencapsulation.setField(instance, "updateInvocationBuilder", invocationBuilder);
 
     new Expectations() {
       {
