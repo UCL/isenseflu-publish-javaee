@@ -2,9 +2,26 @@ package uk.ac.ucl.isenseflu.publish;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.util.HashMap;
+import java.util.Map;
 
 import net.ser1.stomp.Client;
-import org.glassfish.embeddable.*;
+import org.glassfish.embeddable.BootstrapProperties;
+import org.glassfish.embeddable.CommandResult;
+import org.glassfish.embeddable.CommandRunner;
+import org.glassfish.embeddable.Deployer;
+import org.glassfish.embeddable.GlassFish;
+import org.glassfish.embeddable.GlassFishException;
+import org.glassfish.embeddable.GlassFishProperties;
+import org.glassfish.embeddable.GlassFishRuntime;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import javax.security.auth.login.LoginException;
 //import org.mockserver.integration.ClientAndServer;
@@ -13,14 +30,17 @@ import javax.security.auth.login.LoginException;
  *
  * @author David Guzman
  */
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class SystemIT {
 
-  private GlassFish glassfish;
-  private CommandRunner commandRunner;
-  private CommandResult run;
+  private static GlassFish glassfish;
+  private static CommandRunner commandRunner;
+  private static CommandResult run;
+
 //  private ClientAndServer mockServer;
 
-  public void testAsetup() throws GlassFishException {
+  @BeforeAll
+  public static void beforeAll() throws GlassFishException {
     System.out.println("=========================");
     System.out.println("BeforeAll");
 //    mockServer = ClientAndServer.startClientAndServer(1080);
@@ -69,19 +89,25 @@ public class SystemIT {
     deployer.deploy(ear);
   }
 
-  public void testSystem() throws LoginException, IOException {
+  @Test
+  @Order(1)
+  public void testCallStomp() throws IOException, LoginException, InterruptedException {
     System.out.println("=========================");
-    System.out.println("System Test");
-    /*
-    Client stompClient = new Client("localhost", 7672, "admin", "admin");
-    stompClient.send("/queue/PubModelScore.Q", "date=2019-01-01\nvalue=0.123");
+    System.out.println("Call STOMP");
+
+    String hostname = InetAddress.getLocalHost().getHostName();
+    Client stompClient = new Client(hostname, 7672, "admin", "admin");
+    Map<String, String> headers = new HashMap<>();
+    headers.put("receipt", "stomp-receipt-1");
+    stompClient.send("/queue/PubModelScore.Q", "date=2019-01-01\nvalue=0.123", headers);
+    // Wait two seconds for the receipt
+    boolean receipt = stompClient.waitOnReceipt( "stomp-receipt-1", 2000 );
+    Assertions.assertTrue(receipt);
     stompClient.disconnect();
-    */
-
-
   }
 
-  public void testZteardown() throws GlassFishException {
+  @AfterAll
+  public static void afterAll() throws GlassFishException {
     System.out.println("=========================");
     System.out.println("AfterAll");
     commandRunner = glassfish.getCommandRunner();
