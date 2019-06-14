@@ -28,7 +28,7 @@ public class FetchScores {
     String endDate = localDate.toString();
 
     final Response response = client.target(SCORES_URI)
-      .queryParam("id", "2")
+      .queryParam("id", "3")
       .queryParam("startDate", startDate)
       .queryParam("endDate", endDate)
       .queryParam("resolution", "day")
