@@ -48,12 +48,6 @@
       <version>${version.glassfish}</version>
     </dependency>
     <dependency>
-      <groupId>io.netty</groupId>
-      <artifactId>netty-all</artifactId>
-      <version>4.1.33.Final</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>net.ser1</groupId>
       <artifactId>gozirra-client</artifactId>
       <version>${version.gozirra}</version>
