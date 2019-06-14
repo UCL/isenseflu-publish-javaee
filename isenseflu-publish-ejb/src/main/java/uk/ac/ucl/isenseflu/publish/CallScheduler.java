@@ -4,13 +4,16 @@ import java.time.LocalDate;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.atomic.AtomicReferenceArray;
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Lock;
 import javax.ejb.LockType;
-import javax.ejb.Schedule;
+import javax.ejb.ScheduleExpression;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import javax.ejb.Timeout;
+import javax.ejb.TimerService;
 
 /**
  *
@@ -24,16 +27,22 @@ public class CallScheduler {
   private AtomicReferenceArray<String> lastModelScore;
   private AtomicReference<String> lastPublishedOn;
 
+  @Resource
+  private TimerService timerService;
+
   @EJB
   private PublishModelScore publishModelScore;
 
   @PostConstruct
   public void initialise() {
+    ScheduleExpression expression = new ScheduleExpression();
+    expression.hour(16);
+    timerService.createCalendarTimer(expression);
     lastModelScore = new AtomicReferenceArray<>(new String[]{"", ""});
     lastPublishedOn = new AtomicReference<>("");
   }
 
-  @Schedule(hour = "16")
+  @Timeout
   public void callPublisher() {
     if (!lastModelScore.get(0).equals(lastPublishedOn.get())) {
       publishModelScore.publishScore(lastModelScore.get(1));
