@@ -17,12 +17,12 @@ public abstract class DataStubs {
 
   protected static final LocalDate START_DATE = LocalDate.of(2018, 4, 20);
 
-  protected static final String JSON_RESPONSE = "{\"modeldata\": [" +
+  protected static final String JSON_RESPONSE = "{\"model_data\": [" +
     "{\"id\": 2, " +
     "\"name\": \"Google v2018.04\", " +
-    "\"hasConfidenceInterval\": false, " +
+    "\"has_confidence_interval\": false, " +
     "\"average_score\": 8.245234945106956, " +
-    "\"datapoints\": [" +
+    "\"data_points\": [" +
     "{\"score_date\": \"2019-04-25\", \"score_value\": 5.8970798709844}, " +
     "{\"score_date\": \"2019-04-24\", \"score_value\": 6.12747053709796}, " +
     "{\"score_date\": \"2019-04-23\", \"score_value\": 6.29937691755253}, " +
@@ -53,18 +53,7 @@ public abstract class DataStubs {
     "{\"score_date\": \"2019-03-29\", \"score_value\": 8.9142602983544}, " +
     "{\"score_date\": \"2019-03-28\", \"score_value\": 8.32617989987862}, " +
     "{\"score_date\": \"2019-03-27\", \"score_value\": 7.25593958395504}]}], " +
-    "\"dates\": [" +
-    "\"2019-04-25\", \"2019-04-24\", \"2019-04-23\", \"2019-04-22\", \"2019-04-21\", \"2019-04-20\", \"2019-04-19\", " +
-    "\"2019-04-18\", \"2019-04-17\", \"2019-04-16\", \"2019-04-15\", \"2019-04-14\", \"2019-04-13\", \"2019-04-12\", " +
-    "\"2019-04-11\", \"2019-04-10\", \"2019-04-09\", \"2019-04-08\", \"2019-04-07\", \"2019-04-06\", \"2019-04-05\", " +
-    "\"2019-04-04\", \"2019-04-03\", \"2019-04-02\", \"2019-04-01\", \"2019-03-31\", \"2019-03-30\", \"2019-03-29\", " +
-    "\"2019-03-28\", \"2019-03-27\"], " +
     "\"start_date\": \"2019-03-27\", " +
-    "\"end_date\": \"2019-04-25\", " +
-    "\"rate_thresholds\": {" +
-    "\"low_value\": {\"label\": \"Low epidemic rate\", \"value\": 13.1}, " +
-    "\"medium_value\": {\"label\": \"Medium epidemic rate\", \"value\": 24.2}, " +
-    "\"high_value\": {\"label\": \"High epidemic rate\", \"value\": 68.7}, " +
-    "\"very_high_value\": {\"label\": \"Very high epidemic rate\", \"value\": 108.9}}}";
+    "\"end_date\": \"2019-04-25\"}";
 
 }
