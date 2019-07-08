@@ -38,7 +38,7 @@ public class MessageParser {
   private PlotModelScore plotModelScore;
 
   private final MessageFormat tweetFormat = new MessageFormat(
-          "Based on Google searches, the estimated flu (influenza-like illness) rate for England on the {0} was {1} cases per 100,000 people with an average 7-day {2} rate of {3}% compared to the previous 7-day period https://fludetector.cs.ucl.ac.uk/?start={4}&end={5}&resolution=day&smoothing=0&model_regions-0=7-e #health #AI");
+          "Based on Google searches, the estimated flu (influenza-like illness) rate for England on the {0} was {1} cases per 100,000 people with an average 7-day {2} rate of {3}% compared to the previous 7-day period https://www.i-senseflu.org.uk/?start={4}&end={5}&resolution=day&smoothing=0&id=3&source=twlink #health #AI");
 
   public TweetData getTweetData(String message) {
     Properties properties = PropertyReader.readProperties(message)

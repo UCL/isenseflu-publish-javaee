@@ -83,12 +83,12 @@ public class FetchScoresTest {
         Json.createObjectBuilder()
           .add("id", 1)
           .add("name", "Model name")
-          .add("datapoints", scoresArray)
+          .add("data_points", scoresArray)
           .build()
       )
       .build();
     JsonObject jsonObject = Json.createObjectBuilder()
-      .add("modeldata", modelDataArray)
+      .add("model_data", modelDataArray)
       .build();
 
     new Expectations() {

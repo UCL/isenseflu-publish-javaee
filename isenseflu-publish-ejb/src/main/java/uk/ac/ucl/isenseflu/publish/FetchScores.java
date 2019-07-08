@@ -20,7 +20,7 @@ import javax.ws.rs.core.Response;
 @LocalBean
 public class FetchScores {
 
-  private final String SCORES_URI = "https://fludetector.cs.ucl.ac.uk/api/scores";
+  private final String SCORES_URI = "https://www.i-senseflu.org.uk/api/scores";
   private final Client client = ClientBuilder.newClient();
 
   public List<DatapointModelScore> getScoresForLast30Days(LocalDate localDate) {
@@ -28,11 +28,9 @@ public class FetchScores {
     String endDate = localDate.toString();
 
     final Response response = client.target(SCORES_URI)
-      .queryParam("id", "2")
+      .queryParam("id", "3")
       .queryParam("startDate", startDate)
       .queryParam("endDate", endDate)
-      .queryParam("resolution", "day")
-      .queryParam("smoothing", "0")
       .request(MediaType.APPLICATION_JSON_TYPE)
       .get();
 
@@ -42,11 +40,11 @@ public class FetchScores {
     }
 
     JsonArray jsonArray = response.readEntity(JsonObject.class)
-      .getJsonArray("modeldata");
+      .getJsonArray("model_data");
 
     List<DatapointModelScore> datapoints = jsonArray
       .getJsonObject(0)
-      .getJsonArray("datapoints")
+      .getJsonArray("data_points")
       .stream()
       .filter(o -> o instanceof JsonObject)
       .map(o -> (JsonObject) o)
