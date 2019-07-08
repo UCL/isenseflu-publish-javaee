@@ -10,8 +10,6 @@
     <module>isenseflu-publish-ear</module>
     <module>isenseflu-publish-ejb</module>
     <module>isenseflu-publish-it</module>
-    <module>isenseflu-publish-lib</module>
-    <module>isenseflu-publish-ac</module>
   </modules>
   <properties>
     <maven.compiler.source>1.8</maven.compiler.source>
