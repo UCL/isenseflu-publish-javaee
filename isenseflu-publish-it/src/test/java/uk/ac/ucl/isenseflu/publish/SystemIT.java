@@ -3,6 +3,7 @@ package uk.ac.ucl.isenseflu.publish;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -55,6 +56,12 @@ public class SystemIT {
     glassfish.start();
 
     commandRunner = glassfish.getCommandRunner();
+
+    LocalTime callTime = LocalTime.now().plusMinutes(1);
+    run = commandRunner.run("create-system-properties", String.format("TWITTER_SCHEDULED_FOR=%1$tH\\:%1$tM", callTime));
+    run = commandRunner.run("list-system-properties");
+    System.out.println(run.getOutput());
+
     run = commandRunner.run("create-jmsdest", "--desttype", "queue", "PubModelScore.Q");
     System.out.println(run.getOutput());
 
@@ -65,11 +72,6 @@ public class SystemIT {
       "--property" ,
       "Name=PubModelScore.Q",
       "jms/PubModelScoreQ"
-    );
-    System.out.println(run.getOutput());
-
-    run = commandRunner.run(
-      "list-log-attributes"
     );
     System.out.println(run.getOutput());
 
@@ -104,6 +106,13 @@ public class SystemIT {
     boolean receipt = stompClient.waitOnReceipt( "stomp-receipt-1", 2000 );
     Assertions.assertTrue(receipt);
     stompClient.disconnect();
+  }
+
+  @Test
+  @Order(2)
+  public void testWaitForEvent() throws InterruptedException {
+    Thread.sleep(70000);
+    System.out.println("+++++++++++=========================");
   }
 
   @AfterAll

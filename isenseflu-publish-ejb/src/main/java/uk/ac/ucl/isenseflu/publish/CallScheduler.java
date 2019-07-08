@@ -24,6 +24,7 @@ import javax.ejb.TimerService;
 @Startup
 public class CallScheduler {
 
+  private final String DEFAULT_TWEET_TIME = "16:00";
   private AtomicReferenceArray<String> lastModelScore;
   private AtomicReference<String> lastPublishedOn;
 
@@ -35,8 +36,11 @@ public class CallScheduler {
 
   @PostConstruct
   public void initialise() {
+    String twitterSchedule = PropertyReader.getFromSystemOrEnv("TWITTER_SCHEDULED_FOR");
+    String[] tweetTime = twitterSchedule.indexOf(":") == 2 ? twitterSchedule.split(":") : DEFAULT_TWEET_TIME.split(":");
     ScheduleExpression expression = new ScheduleExpression();
-    expression.hour(16);
+    expression.hour(tweetTime[0]);
+    expression.minute(tweetTime[1]);
     timerService.createCalendarTimer(expression);
     lastModelScore = new AtomicReferenceArray<>(new String[]{"", ""});
     lastPublishedOn = new AtomicReference<>("");
