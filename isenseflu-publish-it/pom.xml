@@ -15,6 +15,7 @@
   <properties>
     <version.glassfish>5.1.0</version.glassfish>
     <version.gozirra>0.4.1</version.gozirra>
+    <version.grizzly-bootstrap>1.9</version.grizzly-bootstrap>
     <version.maven-failsafe-plugin>2.22.1</version.maven-failsafe-plugin>
     <version.maven-jar-plugin>3.1.1</version.maven-jar-plugin>
     <version.maven-dependency-plugin>3.1.1</version.maven-dependency-plugin>
@@ -45,11 +46,18 @@
       <groupId>org.glassfish.main.common</groupId>
       <artifactId>simple-glassfish-api</artifactId>
       <version>${version.glassfish}</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>net.ser1</groupId>
       <artifactId>gozirra-client</artifactId>
       <version>${version.gozirra}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.grizzly</groupId>
+      <artifactId>grizzly-npn-bootstrap</artifactId>
+      <version>${version.grizzly-bootstrap}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
