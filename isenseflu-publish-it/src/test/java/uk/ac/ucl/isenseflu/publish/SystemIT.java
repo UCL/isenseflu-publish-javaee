@@ -25,7 +25,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
 import javax.security.auth.login.LoginException;
-//import org.mockserver.integration.ClientAndServer;
 
 /**
  *
@@ -38,13 +37,10 @@ public class SystemIT {
   private static CommandRunner commandRunner;
   private static CommandResult run;
 
-//  private ClientAndServer mockServer;
-
   @BeforeAll
   public static void beforeAll() throws GlassFishException {
     System.out.println("=========================");
     System.out.println("BeforeAll");
-//    mockServer = ClientAndServer.startClientAndServer(1080);
 
     BootstrapProperties bootstrapProperties = new BootstrapProperties();
     bootstrapProperties.setInstallRoot(System.getProperty("gfroot"));
@@ -57,8 +53,11 @@ public class SystemIT {
 
     commandRunner = glassfish.getCommandRunner();
 
-    LocalTime callTime = LocalTime.now().plusMinutes(1);
+    LocalTime callTime = LocalTime.now().plusSeconds(30L);
     run = commandRunner.run("create-system-properties", String.format("TWITTER_SCHEDULED_FOR=%1$tH\\:%1$tM", callTime));
+    run = commandRunner.run("create-system-properties", "API_SCORES_URI=http\\://localhost\\:1080/flu/scores");
+    run = commandRunner.run("create-system-properties", "TWITTER_STATUS_URI=http\\://localhost\\:1080/twitter/status");
+    run = commandRunner.run("create-system-properties", "TWITTER_MEDIA_URI=http\\://localhost\\:1080/twitter/media");
     run = commandRunner.run("list-system-properties");
     System.out.println(run.getOutput());
 
@@ -111,8 +110,10 @@ public class SystemIT {
   @Test
   @Order(2)
   public void testWaitForEvent() throws InterruptedException {
+
     Thread.sleep(70000);
     System.out.println("+++++++++++=========================");
+    //Thread.sleep(70000);
   }
 
   @AfterAll
@@ -125,7 +126,6 @@ public class SystemIT {
     run = commandRunner.run("delete-jmsdest", "--desttype", "queue", "PubModelScore.Q");
     System.out.println(run.getOutput());
     glassfish.stop();
-//    mockServer.stop();
     System.out.println("=========================");
   }
 

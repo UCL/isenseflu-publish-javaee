@@ -19,6 +19,14 @@ public class PropertyReader {
     return (value != null) ? value : "";
   }
 
+  public static String getFromSystemOrEnvOrElse(final String key, final String defaultValue) {
+    String value = System.getProperty(key, "");
+    if (value.isEmpty()) {
+      value = System.getenv(key);
+    }
+    return (value != null) ? value : defaultValue;
+  }
+
   public static Optional<Properties> readProperties(String propstr) {
     final Properties p = new Properties();
     try {
@@ -28,4 +36,5 @@ public class PropertyReader {
     }
     return Optional.of(p);
   }
+
 }

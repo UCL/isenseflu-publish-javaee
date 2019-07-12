@@ -18,6 +18,7 @@
     <version.grizzly-bootstrap>1.9</version.grizzly-bootstrap>
     <version.maven-failsafe-plugin>2.22.1</version.maven-failsafe-plugin>
     <version.maven-jar-plugin>3.1.1</version.maven-jar-plugin>
+    <version.maven-mockserver-plugin>5.6.0</version.maven-mockserver-plugin>
     <version.maven-dependency-plugin>3.1.1</version.maven-dependency-plugin>
     <glassfish-embedded-static-shell.jar>
       ${project.build.directory}/glassfish5/glassfish/lib/embedded/glassfish-embedded-static-shell.jar
@@ -136,7 +137,7 @@
               <outputDirectory>${project.build.directory}/glassfish5/glassfish/domains/domain1/config</outputDirectory>
               <resources>
                 <resource>
-                  <directory>${project.basedir}/src/test/resources</directory>
+                  <directory>${project.basedir}/src/test/resources/glassfish</directory>
                 </resource>
               </resources>
               <overwrite>true</overwrite>
@@ -164,6 +165,32 @@
                 <derby.stream.error.file>${project.build.directory}/derby.log</derby.stream.error.file>
               </systemPropertyVariables>
             </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.mock-server</groupId>
+        <artifactId>mockserver-maven-plugin</artifactId>
+        <version>${version.maven-mockserver-plugin}</version>
+        <configuration>
+          <serverPort>1080</serverPort>
+          <logLevel>DEBUG</logLevel>
+          <initializationJson>../../src/test/resources/mockserverInitializer.json</initializationJson>
+        </configuration>
+        <executions>
+          <execution>
+            <id>process-test-classes</id>
+            <phase>pre-integration-test</phase>
+            <goals>
+              <goal>start</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>verify</id>
+            <phase>post-integration-test</phase>
+            <goals>
+              <goal>stop</goal>
+            </goals>
           </execution>
         </executions>
       </plugin>

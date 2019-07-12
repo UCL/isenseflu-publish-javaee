@@ -34,8 +34,12 @@ import org.glassfish.jersey.media.multipart.file.StreamDataBodyPart;
 @LocalBean
 public class PublishModelScore {
 
-  private final String STATUS_URI = "https://api.twitter.com/1.1/statuses/update.json";
-  private final String MEDIA_URI = "https://upload.twitter.com/1.1/media/upload.json";
+  private final String STATUS_URI = PropertyReader.getFromSystemOrEnvOrElse(
+    "TWITTER_STATUS_URI", "https://api.twitter.com/1.1/statuses/update.json"
+  );
+  private final String MEDIA_URI = PropertyReader.getFromSystemOrEnvOrElse(
+    "TWITTER_MEDIA_URI", "https://upload.twitter.com/1.1/media/upload.json"
+  );
 
   private final ConsumerCredentials consumerCredentials = new ConsumerCredentials(
           PropertyReader.getFromSystemOrEnv("TWITTER_KEY"),

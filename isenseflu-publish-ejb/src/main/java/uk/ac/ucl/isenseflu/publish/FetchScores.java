@@ -20,8 +20,10 @@ import javax.ws.rs.core.Response;
 @LocalBean
 public class FetchScores {
 
-  private final String SCORES_URI = "https://www.i-senseflu.org.uk/api/scores";
   private final Client client = ClientBuilder.newClient();
+  private final String SCORES_URI = PropertyReader.getFromSystemOrEnvOrElse(
+    "API_SCORES_URI", "https://www.i-senseflu.org.uk/api/scores"
+  );
 
   public List<DatapointModelScore> getScoresForLast30Days(LocalDate localDate) {
     String startDate = localDate.minusDays(30).toString();
