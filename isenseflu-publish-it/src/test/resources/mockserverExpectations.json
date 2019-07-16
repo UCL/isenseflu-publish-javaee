@@ -62,7 +62,7 @@
     },
     "httpResponse": {
       "statusCode": 200,
-      "body": "some first response"
+      "body": "{"
     },
     "times": {
       "remainingTimes" : 1,
