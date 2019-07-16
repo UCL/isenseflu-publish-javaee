@@ -128,7 +128,7 @@
             <excludeTags>${junit.exclude}</excludeTags>
           </properties>
           <argLine>
-            -javaagent:${settings.localRepository}/org/jmockit/jmockit/${version.jmockit}/jmockit-${version.jmockit}.jar
+            -javaagent:${settings.localRepository}/org/jmockit/jmockit/${version.jmockit}/jmockit-${version.jmockit}.jar -Duser.region=GB
           </argLine>
         </configuration>
       </plugin>
