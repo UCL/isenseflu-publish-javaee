@@ -8,8 +8,8 @@ import mockit.Tested;
 import mockit.Verifications;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import uk.ac.ucl.isenseflu.publish.CallScheduler;
-import uk.ac.ucl.isenseflu.publish.PublishModelScore;
+
+import javax.ejb.TimerService;
 
 /**
  *
@@ -22,6 +22,9 @@ public class CallSchedulerTest {
 
   @Injectable
   PublishModelScore publishModelScore;
+
+  @Injectable
+  TimerService timerService;
 
   @Test
   public void testSetScore() {

@@ -1,5 +1,7 @@
 # isenseflu-publish-javaee
 
+[![Build Status](https://travis-ci.org/UCL/isenseflu-publish-javaee.svg?branch=master)](https://travis-ci.org/UCL/isenseflu-publish-javaee)
+
 i-sense flu component for publishing scores on social media
 
 ## JRE version

@@ -24,10 +24,6 @@
       <version>${project.version}</version>
       <type>ejb</type>
     </dependency>
-    <dependency>
-      <groupId>org.glassfish.jersey.security</groupId>
-      <artifactId>oauth1-client</artifactId>
-    </dependency>
   </dependencies>
 
   <build>
