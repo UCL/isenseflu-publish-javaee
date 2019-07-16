@@ -190,6 +190,7 @@
         <jvm-options>-Dfelix.fileinstall.disableConfigSave=false</jvm-options>
         <jvm-options>-XX:NewRatio=2</jvm-options>
         <jvm-options>-Dcom.ctc.wstx.returnNullForDefaultNamespace=true</jvm-options>
+        <jvm-options>-Dmockserver.logLevel=WARN</jvm-options>
       </java-config>
       <network-config>
         <protocols>

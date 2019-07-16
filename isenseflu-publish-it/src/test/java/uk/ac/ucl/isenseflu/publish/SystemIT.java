@@ -5,6 +5,7 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.URL;
@@ -30,6 +31,9 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
 import javax.security.auth.login.LoginException;
 
 import static java.nio.file.Files.readAllBytes;
@@ -125,8 +129,17 @@ public class SystemIT {
     System.out.println("=========================");
     System.out.println("Wait for Event");
     String content = new String(readAllBytes(Paths.get(System.getProperty("mockserver.expectations"))));
-    queryMockServer("http://localhost:8080/mockserver/expectation","PUT", content);
+    queryMockServer("http://localhost:8080/mockserver/expectation", content);
     Thread.sleep(70000);
+    String statusReq = queryMockServer(
+      "http://localhost:8080/mockserver/retrieve?type=REQUESTS&format=JSON",
+      "{\"path\": \"/twitter/status\"}"
+    );
+    JsonReader reader = Json.createReader(new StringReader(statusReq));
+    JsonObject jsonObject = reader.readArray().getJsonObject(0);
+    String statusText = jsonObject.getJsonObject("body").getString("string");
+    String expected = "status=Based+on+Google+searches%2C+the+estimated+flu+%28influenza-like+illness%29+rate+for+England+on+the+1st+of+January%2C+2019+was+0.123+cases+per+100%2C000+people+with+an+average+7-day+increase+rate+of+23.948%25+compared+to+the+previous+7-day+period+https%3A%2F%2Fwww.i-senseflu.org.uk%2F%3Fstart%3D2018-12-01%26end%3D2019-01-01%26resolution%3Dday%26smoothing%3D0%26id%3D3%26source%3Dtwlink+%23health+%23AI&media_ids=710511363345354753";
+    Assertions.assertEquals(expected, statusText);
   }
 
   @AfterAll
@@ -142,22 +155,21 @@ public class SystemIT {
     System.out.println("=========================");
   }
 
-  private String queryMockServer(String url, String method, String parameters) {
+  private String queryMockServer(String url, String parameters) {
     try {
       URL urlObj = new URL(url);
       HttpURLConnection con = (HttpURLConnection) urlObj.openConnection();
-      con.setRequestMethod(method);
 
-      if ("PUT".equals(method)) {
-        con.setDoOutput(true);
-        DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-        wr.writeBytes(parameters);
-        wr.flush();
-        wr.close();
-      }
+      // PUT request
+      con.setRequestMethod("PUT");
+      con.setDoOutput(true);
+      DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+      wr.writeBytes(parameters);
+      wr.flush();
+      wr.close();
 
       int responseCode = con.getResponseCode();
-      if (responseCode != 201) return "";
+      if (responseCode != 200) return "";
       BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
       String inputLine;
       StringBuffer response = new StringBuffer();
