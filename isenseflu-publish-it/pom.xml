@@ -16,6 +16,7 @@
     <version.glassfish>5.1.0</version.glassfish>
     <version.gozirra>0.4.1</version.gozirra>
     <version.grizzly-bootstrap>1.9</version.grizzly-bootstrap>
+    <version.jsonp>1.1.5</version.jsonp>
     <version.mockserver>5.6.0</version.mockserver>
     <version.slf4j>1.7.26</version.slf4j>
     <version.maven-failsafe-plugin>2.22.1</version.maven-failsafe-plugin>
@@ -70,15 +71,15 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>javax.json</groupId>
-      <artifactId>javax.json-api</artifactId>
-      <version>1.1</version>
+      <groupId>jakarta.json</groupId>
+      <artifactId>jakarta.json-api</artifactId>
+      <version>${version.jsonp}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.glassfish</groupId>
-      <artifactId>javax.json</artifactId>
-      <version>1.1</version>
+      <artifactId>jakarta.json</artifactId>
+      <version>${version.jsonp}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
