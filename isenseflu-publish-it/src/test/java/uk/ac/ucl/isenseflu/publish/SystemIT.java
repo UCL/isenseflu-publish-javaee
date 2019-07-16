@@ -1,8 +1,14 @@
 package uk.ac.ucl.isenseflu.publish;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.InetAddress;
+import java.net.URL;
+import java.nio.file.Paths;
 import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,6 +31,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
 import javax.security.auth.login.LoginException;
+
+import static java.nio.file.Files.readAllBytes;
 
 /**
  *
@@ -53,14 +61,6 @@ public class SystemIT {
 
     commandRunner = glassfish.getCommandRunner();
 
-    LocalTime callTime = LocalTime.now().plusSeconds(30L);
-    run = commandRunner.run("create-system-properties", String.format("TWITTER_SCHEDULED_FOR=%1$tH\\:%1$tM", callTime));
-    run = commandRunner.run("create-system-properties", "API_SCORES_URI=http\\://localhost\\:1080/flu/scores");
-    run = commandRunner.run("create-system-properties", "TWITTER_STATUS_URI=http\\://localhost\\:1080/twitter/status");
-    run = commandRunner.run("create-system-properties", "TWITTER_MEDIA_URI=http\\://localhost\\:1080/twitter/media");
-    run = commandRunner.run("list-system-properties");
-    System.out.println(run.getOutput());
-
     run = commandRunner.run("create-jmsdest", "--desttype", "queue", "PubModelScore.Q");
     System.out.println(run.getOutput());
 
@@ -85,8 +85,20 @@ public class SystemIT {
       "configs.config.server-config.cdi-service.enable-implicit-cdi=false"
     );
 
-    File ear = new File(System.getProperty("app"));
     Deployer deployer = glassfish.getDeployer();
+
+    File war = new File(System.getProperty("mockserver"));
+    deployer.deploy(war, "--name=mockserver", "--contextroot=mockserver");
+
+    LocalTime callTime = LocalTime.now().plusSeconds(90L);
+    run = commandRunner.run("create-system-properties", "API_SCORES_URI=http\\://localhost\\:8080/mockserver/flu/scores");
+    run = commandRunner.run("create-system-properties", "TWITTER_STATUS_URI=http\\://localhost\\:8080/mockserver/twitter/status");
+    run = commandRunner.run("create-system-properties", "TWITTER_MEDIA_URI=http\\://localhost\\:8080/mockserver/twitter/media");
+    run = commandRunner.run("create-system-properties", String.format("TWITTER_SCHEDULED_FOR=%1$tH\\:%1$tM", callTime));
+    run = commandRunner.run("list-system-properties");
+    System.out.println(run.getOutput());
+
+    File ear = new File(System.getProperty("app"));
     deployer.deploy(ear);
   }
 
@@ -109,11 +121,12 @@ public class SystemIT {
 
   @Test
   @Order(2)
-  public void testWaitForEvent() throws InterruptedException {
-
+  public void testWaitForEvent() throws InterruptedException, IOException {
+    System.out.println("=========================");
+    System.out.println("Wait for Event");
+    String content = new String(readAllBytes(Paths.get(System.getProperty("mockserver.expectations"))));
+    queryMockServer("http://localhost:8080/mockserver/expectation","PUT", content);
     Thread.sleep(70000);
-    System.out.println("+++++++++++=========================");
-    //Thread.sleep(70000);
   }
 
   @AfterAll
@@ -127,6 +140,35 @@ public class SystemIT {
     System.out.println(run.getOutput());
     glassfish.stop();
     System.out.println("=========================");
+  }
+
+  private String queryMockServer(String url, String method, String parameters) {
+    try {
+      URL urlObj = new URL(url);
+      HttpURLConnection con = (HttpURLConnection) urlObj.openConnection();
+      con.setRequestMethod(method);
+
+      if ("PUT".equals(method)) {
+        con.setDoOutput(true);
+        DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+        wr.writeBytes(parameters);
+        wr.flush();
+        wr.close();
+      }
+
+      int responseCode = con.getResponseCode();
+      if (responseCode != 201) return "";
+      BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+      String inputLine;
+      StringBuffer response = new StringBuffer();
+      while ((inputLine = in.readLine()) != null) {
+        response.append(inputLine);
+      }
+      in.close();
+      return response.toString();
+    } catch (IOException e ) {
+      return "Request failed";
+    }
   }
 
 }

@@ -16,6 +16,8 @@
     <version.glassfish>5.1.0</version.glassfish>
     <version.gozirra>0.4.1</version.gozirra>
     <version.grizzly-bootstrap>1.9</version.grizzly-bootstrap>
+    <version.mockserver>5.6.0</version.mockserver>
+    <version.slf4j>1.7.26</version.slf4j>
     <version.maven-failsafe-plugin>2.22.1</version.maven-failsafe-plugin>
     <version.maven-jar-plugin>3.1.1</version.maven-jar-plugin>
     <version.maven-mockserver-plugin>5.6.0</version.maven-mockserver-plugin>
@@ -61,6 +63,12 @@
       <version>${version.grizzly-bootstrap}</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <version>${version.slf4j}</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <build>
@@ -91,6 +99,12 @@
                   <artifactId>isenseflu-publish-ear</artifactId>
                   <version>${project.version}</version>
                   <type>ear</type>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.mock-server</groupId>
+                  <artifactId>mockserver-war</artifactId>
+                  <version>${version.mockserver}</version>
+                  <type>war</type>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.glassfish.main.distributions</groupId>
@@ -163,34 +177,10 @@
                 <gfroot>${project.build.directory}/glassfish5/glassfish</gfroot>
                 <app>${project.build.directory}/isenseflu-publish-ear-${project.version}.ear</app>
                 <derby.stream.error.file>${project.build.directory}/derby.log</derby.stream.error.file>
+                <mockserver>${project.build.directory}/mockserver-war-5.6.0.war</mockserver>
+                <mockserver.expectations>${project.basedir}/src/test/resources/mockserverExpectations.json</mockserver.expectations>
               </systemPropertyVariables>
             </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.mock-server</groupId>
-        <artifactId>mockserver-maven-plugin</artifactId>
-        <version>${version.maven-mockserver-plugin}</version>
-        <configuration>
-          <serverPort>1080</serverPort>
-          <logLevel>DEBUG</logLevel>
-          <initializationJson>../../src/test/resources/mockserverInitializer.json</initializationJson>
-        </configuration>
-        <executions>
-          <execution>
-            <id>process-test-classes</id>
-            <phase>pre-integration-test</phase>
-            <goals>
-              <goal>start</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>verify</id>
-            <phase>post-integration-test</phase>
-            <goals>
-              <goal>stop</goal>
-            </goals>
           </execution>
         </executions>
       </plugin>
