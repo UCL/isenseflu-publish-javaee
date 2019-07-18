@@ -105,6 +105,11 @@ asadmin> deploy --name isenseflu-publish [...path/to/...]isenseflu-ear-[version]
 
 Or via Administration Console (usually `http://hostname:4848`)
 
+## Reporting bugs
+
+Please use the GitHub issue tracker for any bugs or feature suggestions:
+
+[https://github.com/UCL/isenseflu-publish-javaee/issues](https://github.com/UCL/isenseflu-publish-javaee/issues)
 
 ## Contributing
 
@@ -113,6 +118,13 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 Please make sure to update tests as appropriate.
 
 Please keep the use of 3rd party runtime libraries to a minimum. The application is expected to run on a standard Java EE 8 server ([Eclipse Glassfish 5 full profle][eclipse-glassfish-5]). 
+
+## Copyright
+
+isenseflu-publish-javaee is licensed under the GNU General Public License, v3. A copy of this license is included in the file [LICENSE.md](LICENSE.md).
+
+
+&copy; 2019 UCL ([https://www.ucl.ac.uk](https://www.ucl.ac.uk)).
 
 
 [eclipse-glassfish-5]: https://projects.eclipse.org/projects/ee4j.glassfish/downloads
