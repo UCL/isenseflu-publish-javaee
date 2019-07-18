@@ -1,5 +1,6 @@
 /*
- * i-sense flu publish: Module of the i-sense flu application used in the publication of model scores on social media
+ * i-sense flu publish: Module of the i-sense flu application used in the
+ * publication of model scores on social media
  *
  * Copyright (c) 2019, UCL <https://www.ucl.ac.uk/>
  *
@@ -23,7 +24,6 @@ package uk.ac.ucl.isenseflu.publish;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.time.LocalDate;
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -80,7 +80,7 @@ public class PublishModelScoreTest {
         result = "test.png";
 
         tweetData.getChartAsPng();
-        result = (InputStream) new ByteArrayInputStream(new byte[0]);
+        result = new ByteArrayInputStream(new byte[0]);
 
         invocationBuilder.post(entity);
         result = response;

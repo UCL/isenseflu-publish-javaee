@@ -1,5 +1,6 @@
 /*
- * i-sense flu publish: Module of the i-sense flu application used in the publication of model scores on social media
+ * i-sense flu publish: Module of the i-sense flu application used in the
+ * publication of model scores on social media
  *
  * Copyright (c) 2019, UCL <https://www.ucl.ac.uk/>
  *
@@ -32,8 +33,6 @@ import mockit.Mocked;
 import mockit.Tested;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import uk.ac.ucl.isenseflu.publish.CallScheduler;
-import uk.ac.ucl.isenseflu.publish.ReceiveModelScore;
 
 /**
  *

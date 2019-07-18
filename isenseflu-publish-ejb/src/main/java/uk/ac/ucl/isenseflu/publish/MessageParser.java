@@ -1,5 +1,6 @@
 /*
- * i-sense flu publish: Module of the i-sense flu application used in the publication of model scores on social media
+ * i-sense flu publish: Module of the i-sense flu application used in the
+ * publication of model scores on social media
  *
  * Copyright (c) 2019, UCL <https://www.ucl.ac.uk/>
  *
@@ -155,7 +156,7 @@ public class MessageParser {
         }
       };
       ImageIO.write(chart, "png", os);
-      return (InputStream) new ByteArrayInputStream(os.toByteArray(), 0, os.size());
+      return new ByteArrayInputStream(os.toByteArray(), 0, os.size());
     }
 
     public String getPngFilename() {

@@ -1,5 +1,6 @@
 /*
- * i-sense flu publish: Module of the i-sense flu application used in the publication of model scores on social media
+ * i-sense flu publish: Module of the i-sense flu application used in the
+ * publication of model scores on social media
  *
  * Copyright (c) 2019, UCL <https://www.ucl.ac.uk/>
  *
@@ -42,15 +43,16 @@ import javax.ws.rs.core.Response;
 public class FetchScores {
 
   private final Client client = ClientBuilder.newClient();
-  private final String SCORES_URI = PropertyReader.getFromSystemOrEnvOrElse(
+  private final String scoresUri = PropertyReader.getFromSystemOrEnvOrElse(
     "API_SCORES_URI", "https://www.i-senseflu.org.uk/api/scores"
   );
+  private final int numberDaysForStartDate = 30;
 
-  public List<DatapointModelScore> getScoresForLast30Days(LocalDate localDate) {
-    String startDate = localDate.minusDays(30).toString();
+  public List<DatapointModelScore> getScoresForLast30Days(final LocalDate localDate) {
+    String startDate = localDate.minusDays(numberDaysForStartDate).toString();
     String endDate = localDate.toString();
 
-    final Response response = client.target(SCORES_URI)
+    final Response response = client.target(scoresUri)
       .queryParam("id", "3")
       .queryParam("startDate", startDate)
       .queryParam("endDate", endDate)
@@ -65,7 +67,7 @@ public class FetchScores {
     JsonArray jsonArray = response.readEntity(JsonObject.class)
       .getJsonArray("model_data");
 
-    List<DatapointModelScore> datapoints = jsonArray
+    return jsonArray
       .getJsonObject(0)
       .getJsonArray("data_points")
       .stream()
@@ -76,8 +78,6 @@ public class FetchScores {
         Double value = jsonObject.getJsonNumber("score_value").doubleValue();
         return new DatapointModelScore(date, value);
       }).collect(Collectors.toList());
-
-    return datapoints;
   }
 
 }

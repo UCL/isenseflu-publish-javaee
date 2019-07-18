@@ -1,5 +1,6 @@
 /*
- * i-sense flu publish: Module of the i-sense flu application used in the publication of model scores on social media
+ * i-sense flu publish: Module of the i-sense flu application used in the
+ * publication of model scores on social media
  *
  * Copyright (c) 2019, UCL <https://www.ucl.ac.uk/>
  *
@@ -45,7 +46,7 @@ import javax.ejb.TimerService;
 @Startup
 public class CallScheduler {
 
-  private final String DEFAULT_TWEET_TIME = "16:00";
+  private final String defaultTweetTime = "16:00";
   private AtomicReferenceArray<String> lastModelScore;
   private AtomicReference<String> lastPublishedOn;
 
@@ -57,11 +58,13 @@ public class CallScheduler {
 
   @PostConstruct
   public void initialise() {
-    String twitterSchedule = PropertyReader.getFromSystemOrEnv("TWITTER_SCHEDULED_FOR");
-    String[] tweetTime = twitterSchedule.indexOf(":") == 2 ? twitterSchedule.split(":") : DEFAULT_TWEET_TIME.split(":");
+    String twitterScheduledFor = PropertyReader
+      .getFromSystemOrEnv("TWITTER_SCHEDULED_FOR");
+    String[] tweetTimeHourMin = twitterScheduledFor.indexOf(":") == 2
+      ? twitterScheduledFor.split(":") : defaultTweetTime.split(":");
     ScheduleExpression expression = new ScheduleExpression();
-    expression.hour(tweetTime[0]);
-    expression.minute(tweetTime[1]);
+    expression.hour(tweetTimeHourMin[0]);
+    expression.minute(tweetTimeHourMin[1]);
     timerService.createCalendarTimer(expression);
     lastModelScore = new AtomicReferenceArray<>(new String[]{"", ""});
     lastPublishedOn = new AtomicReference<>("");
@@ -76,11 +79,10 @@ public class CallScheduler {
   }
 
   @Lock(LockType.WRITE)
-  public void setLastModelScore(String score) {
+  public void setLastModelScore(final String score) {
     if (!score.isEmpty()) {
       lastModelScore.set(0, LocalDate.now().toString());
       lastModelScore.set(1, score);
-
     }
   }
 
