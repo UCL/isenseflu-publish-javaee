@@ -163,7 +163,7 @@ Please keep the use of 3rd party runtime libraries to a minimum. The application
 - David Guzman (Github: [@david-guzman](https://github.com/david-guzman))
 
 
-## Acknowledgements
+## Acknowledgements
 
 i-sense flu publish is supported by the EPSRC IRC project [i-sense](https://www.i-sense.org.uk/) (Early-Warning Sensing Systems for Infectious Diseases).
 
