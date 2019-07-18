@@ -21,7 +21,7 @@ i-sense flu is a multi-module application that uses Google search data to estima
 - Allows the reception of one score per day
 
 
-## Technologies
+## Technologies
 
 - Java EE8
 - STOMP messaging
