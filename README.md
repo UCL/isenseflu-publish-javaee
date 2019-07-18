@@ -1,11 +1,24 @@
 ![i-sense flu](https://res.cloudinary.com/uclfmedia/image/upload/v1563449524/isenseflu/logo_300.svg)
 
-# isenseflu-publish-javaee
+# i-sense flu publish
 
-i-sense flu component for publishing scores on social media
+Module of the i-sense flu application used in the scheduled publication of model scores on social media (Twitter)
 
 [![Build Status](https://travis-ci.org/UCL/isenseflu-publish-javaee.svg?branch=master)](https://travis-ci.org/UCL/isenseflu-publish-javaee)
 ![GitHub release](https://img.shields.io/github/release/UCL/isenseflu-publish-javaee.svg)
+
+
+## Background
+
+i-sense flu is a multi-module application that uses Google search data to estimate influenza-like illness (flu) rates in England. The i-sense flu publish module is responsible for publishing a tweet containing the latest score, along with a chart showing the scores for the last 30 days, and the rate of change in the scores, relative to the previous 7-day period.
+
+
+## Features
+
+- Scheduled publishing of tweets based on a set template
+- Creation of a chart containing the scores for the last 30 days
+- Scores are received via STOMP messages
+- Allows the reception of one score per day
 
 
 ## Technologies
@@ -13,6 +26,7 @@ i-sense flu component for publishing scores on social media
 - Java EE8
 - STOMP messaging
 - REST
+
 
 ## Installation
 
@@ -111,6 +125,7 @@ asadmin> deploy --name isenseflu-publish [...path/to/...]isenseflu-ear-[version]
 
 Or via Administration Console (usually `http://hostname:4848`)
 
+
 ## Building
 
 Build the application from source using the `mvnw` Maven wrapper script provided, it requires `JAVA_HOME` set to JDK8 (tested with Open JDK 8). Fetch the sources from the master branch only.
@@ -133,6 +148,7 @@ Please use the GitHub issue tracker for any bugs or feature suggestions:
 
 [https://github.com/UCL/isenseflu-publish-javaee/issues](https://github.com/UCL/isenseflu-publish-javaee/issues)
 
+
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
@@ -141,9 +157,16 @@ Please make sure to update tests as appropriate.
 
 Please keep the use of 3rd party runtime libraries to a minimum. The application is expected to run on a standard Java EE 8 server ([Eclipse Glassfish 5 full profle][eclipse-glassfish-5]). 
 
+
 ## Authors
 
 - David Guzman (Github: [@david-guzman](https://github.com/david-guzman))
+
+
+## Acknowledgements
+
+i-sense flu publish is supported by the EPSRC IRC project [i-sense](https://www.i-sense.org.uk/) (Early-Warning Sensing Systems for Infectious Diseases).
+
 
 ## Copyright
 
