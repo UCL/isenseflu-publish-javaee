@@ -36,19 +36,39 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
+ * Retrieves the flu scores for the last 30 days from the i-sense flu API.
  * @author David Guzman
  */
 @Stateless
 @LocalBean
 public class FetchScores {
 
+  /**
+   * An instance of a JAX-RS client. Defaults to Jersey.
+   */
   private final Client client = ClientBuilder.newClient();
+
+  /**
+   * The URI to call to fetch the scores.
+   */
   private final String scoresUri = PropertyReader.getFromSystemOrEnvOrElse(
     "API_SCORES_URI", "https://www.i-senseflu.org.uk/api/scores"
   );
+
+  /**
+   * The number of days used to calculate the start date.
+   */
   private final int numberDaysForStartDate = 30;
 
-  public List<DatapointModelScore> getScoresForLast30Days(final LocalDate localDate) {
+  /**
+   * Calls the i-sense flu API to fetch the scores for a window of 30 days
+   * building a list of data points with them.
+   * @param localDate The end date of the time window to call the scores for.
+   * @return A list of data points in the time series for a window of 30 days.
+   */
+  public List<DatapointModelScore> getScoresForLast30Days(
+    final LocalDate localDate
+  ) {
     String startDate = localDate.minusDays(numberDaysForStartDate).toString();
     String endDate = localDate.toString();
 
@@ -61,7 +81,9 @@ public class FetchScores {
 
     if (response.getStatus() != Response.Status.OK.getStatusCode()) {
       client.close();
-      throw new EJBException("Request to FluDetector Scores API did not return 200/OK");
+      throw new EJBException(
+        "Request to FluDetector Scores API did not return 200/OK"
+      );
     }
 
     JsonArray jsonArray = response.readEntity(JsonObject.class)
