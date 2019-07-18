@@ -8,6 +8,12 @@ i-sense flu component for publishing scores on social media
 ![GitHub release](https://img.shields.io/github/release/UCL/isenseflu-publish-javaee.svg)
 
 
+## Technologies
+
+- Java EE8
+- STOMP messaging
+- REST
+
 ## Installation
 
 ### Requirements
@@ -105,6 +111,22 @@ asadmin> deploy --name isenseflu-publish [...path/to/...]isenseflu-ear-[version]
 
 Or via Administration Console (usually `http://hostname:4848`)
 
+## Building
+
+Build the application from source using the `mvnw` Maven wrapper script provided, it requires `JAVA_HOME` set to JDK8 (tested with Open JDK 8). Fetch the sources from the master branch only.
+
+```
+./mvnw package
+```
+
+The EAR application will be found under `isenseflu-publish-ear/target/`
+
+The system test runs within a local installation of Glassfish 5.1 and uses Mock Server to mock the external APIs. The tests follow the process from receiving the STOMP message up to publishing the Tweet in the required format. The complete system test should not take more than 3 minutes to complete. Run with:
+
+```
+./mvnw verify
+```
+
 ## Reporting bugs
 
 Please use the GitHub issue tracker for any bugs or feature suggestions:
@@ -118,6 +140,10 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 Please make sure to update tests as appropriate.
 
 Please keep the use of 3rd party runtime libraries to a minimum. The application is expected to run on a standard Java EE 8 server ([Eclipse Glassfish 5 full profle][eclipse-glassfish-5]). 
+
+## Authors
+
+- David Guzman (Github: [@david-guzman](https://github.com/david-guzman))
 
 ## Copyright
 
