@@ -38,6 +38,9 @@ import javax.ejb.Timeout;
 import javax.ejb.TimerService;
 
 /**
+ * CallScheduler is responsible for the configuration of the EJB Timer service
+ * and triggering the event required to publish the model score as managed
+ * by PublishModelScore.
  *
  * @author David Guzman
  */
@@ -46,16 +49,42 @@ import javax.ejb.TimerService;
 @Startup
 public class CallScheduler {
 
+  /**
+   * Default time when CallScheduler will trigger the publishing of the score.
+   * Can be overridden with the system property or environment variable
+   * TWITTER_SCHEDULED_FOR
+   */
   private final String defaultTweetTime = "16:00";
+
+  /**
+   * Array to contain the date of the last score published, and the value of
+   * the score.
+   */
   private AtomicReferenceArray<String> lastModelScore;
+
+  /**
+   * Stores the date (as a String) when the last tweet was published.
+   */
   private AtomicReference<String> lastPublishedOn;
 
+  /**
+   * EJB container-managed service used to invoke #callPublisher at a
+   * specific time, as configured in #initialise.
+   */
   @Resource
   private TimerService timerService;
 
+  /**
+   * Bean responsible for coordinating the process for publishing the
+   * score on social media.
+   */
   @EJB
   private PublishModelScore publishModelScore;
 
+  /**
+   * Configures the EJB timer service, setting the time at which the
+   * #callPublisher method will the triggered.
+   */
   @PostConstruct
   public void initialise() {
     String twitterScheduledFor = PropertyReader
@@ -70,6 +99,10 @@ public class CallScheduler {
     lastPublishedOn = new AtomicReference<>("");
   }
 
+  /**
+   * Sends the latest score data to PublishModelScore. Called by the
+   * EJB timer service.
+   */
   @Timeout
   public void callPublisher() {
     if (!lastModelScore.get(0).equals(lastPublishedOn.get())) {
@@ -78,6 +111,11 @@ public class CallScheduler {
     }
   }
 
+  /**
+   * Allows the message-driven bean ReceiveModelScore to set the date of
+   * reception and the score message to be passed on to PublishModelScore.
+   * @param score The message containing the score data.
+   */
   @Lock(LockType.WRITE)
   public void setLastModelScore(final String score) {
     if (!score.isEmpty()) {
