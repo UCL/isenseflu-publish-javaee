@@ -198,7 +198,7 @@ public class MessageParser {
     List<Double> scores = scoresList.stream()
             .map((DatapointModelScore s) -> s.getScoreValue())
             .collect(Collectors.toList());
-    Double p = RateCalculator.averageChangeRate.apply(scores);
+    Double p = RateCalculator.averageChangeRate().apply(scores);
     String variation = "variation";
     if (p > 0) {
       variation = "increase";

@@ -27,22 +27,45 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
- *
+ * Utility functions to perform calculations using flu scores.
  * @author David Guzman
  */
 final class RateCalculator {
 
   private RateCalculator() { }
 
-  static Function<List<Double>, Double> averageChangeRate = (List<Double> l) -> {
-    if (l.size() < 15) {
-      throw new IndexOutOfBoundsException("Not enough items in List to perform calculation");
-    }
+  /**
+   * Number of scores + 1, required to perform the calculation.
+   */
+  private static final int MINIMUM_SIZE_OF_SCORES_LIST = 15;
 
-    double F1 = l.subList(0, 7).stream().collect(Collectors.averagingDouble(x -> x));
-    double F2 = l.subList(7, 14).stream().collect(Collectors.averagingDouble(x -> x));
+  /**
+   * Size of the window used to calculate the change rate.
+   */
+  private static final int AVG_WINDOW_SIZE = 7;
 
-    return (F1 - F2) / F2;
-  };
+  /**
+   * Function definition for calculating the average change rate of scores,
+   * comparing the last 7 scores against the previous 7 scores.
+   */
+  private static Function<List<Double>, Double> calculateAverageChangeRate =
+    (List<Double> l) -> {
+      if (l.size() < MINIMUM_SIZE_OF_SCORES_LIST) {
+        throw new IndexOutOfBoundsException(
+          "Not enough items in List to perform calculation"
+        );
+      }
+
+      double f1 = l.subList(0, AVG_WINDOW_SIZE).stream()
+        .collect(Collectors.averagingDouble(x -> x));
+      double f2 = l.subList(AVG_WINDOW_SIZE, AVG_WINDOW_SIZE * 2).stream()
+        .collect(Collectors.averagingDouble(x -> x));
+
+      return (f1 - f2) / f2;
+    };
+
+  static Function<List<Double>, Double> averageChangeRate() {
+    return calculateAverageChangeRate;
+  }
 
 }
