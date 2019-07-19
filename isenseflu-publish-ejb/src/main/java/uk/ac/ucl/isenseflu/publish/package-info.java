@@ -20,22 +20,10 @@
  * along with i-sense flu publish.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package uk.ac.ucl.isenseflu.publish;
-
-import java.time.LocalDate;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
 /**
+ * EJB classes used in the reception of the score data and its publication on
+ * social media outlets (currently on Twitter).
  *
  * @author David Guzman
  */
-public class DatapointModelScoreTest {
-
-  @Test
-  public void testGetDate() {
-    DatapointModelScore datapoint = new DatapointModelScore(LocalDate.parse("2015-02-02"), 1.001);
-    Assertions.assertEquals("02-Feb-2015", datapoint.getDate());
-  }
-
-}
+package uk.ac.ucl.isenseflu.publish;
