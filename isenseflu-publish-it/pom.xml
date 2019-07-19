@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <artifactId>isenseflu-publish</artifactId>
-    <groupId>uk.ac.ucl.flagship2.fludetector</groupId>
+    <groupId>uk.ac.ucl.isenseflu</groupId>
     <version>1.0-SNAPSHOT</version>
   </parent>
 
