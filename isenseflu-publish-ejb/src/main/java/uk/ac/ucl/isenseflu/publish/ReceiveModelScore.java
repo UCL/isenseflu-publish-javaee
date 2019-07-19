@@ -34,21 +34,35 @@ import javax.jms.MessageListener;
 import javax.jms.TextMessage;
 
 /**
- *
+ * Processes the message received from the message queue containing the score
+ * data.
  * @author David Guzman <d.guzman at ucl.ac.uk>
  */
 @MessageDriven(activationConfig = {
-  @ActivationConfigProperty(propertyName = "destinationLookup", propertyValue = "jms/PubModelScoreQ")
-  ,
-  @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue")
+  @ActivationConfigProperty(
+    propertyName = "destinationLookup", propertyValue = "jms/PubModelScoreQ"
+  ),
+  @ActivationConfigProperty(
+    propertyName = "destinationType", propertyValue = "javax.jms.Queue"
+  )
 })
 public class ReceiveModelScore implements MessageListener {
 
+  /**
+   * Scheduler responsible to trigger the publication of a score report on
+   * social media.
+   */
   @EJB
   private CallScheduler callScheduler;
 
+  /**
+   * Extracts the text content received by the message queue. Method is called
+   * when a new message arrives. If the message is valid, it sends the data
+   * to the CallScheduler.
+   * @param msg The message received in the queue.
+   */
   @Override
-  public void onMessage(Message msg) {
+  public void onMessage(final Message msg) {
     String out = "";
     if (msg instanceof TextMessage) {
       TextMessage txt = (TextMessage) msg;
@@ -58,8 +72,10 @@ public class ReceiveModelScore implements MessageListener {
         throw new RuntimeException(ex);
       }
     } else if (msg instanceof BytesMessage) {
-      Logger.getLogger(ReceiveModelScore.class.getName())
-              .log(Level.WARNING, "Messages should be sent as UTF-8 text, content-length header should not be present");
+      Logger.getLogger(ReceiveModelScore.class.getName()).log(
+        Level.WARNING,
+        "Messages should be sent as UTF-8 text, content-length header should "
+        + "not be present");
       BytesMessage byteMessage = (BytesMessage) msg;
       byte[] byteData = null;
       try {
@@ -71,20 +87,32 @@ public class ReceiveModelScore implements MessageListener {
         throw new RuntimeException(ex);
       }
     } else {
-      throw new IllegalArgumentException("Message must be of type TextMessage or ByteMessage");
+      throw new IllegalArgumentException(
+        "Message must be of type TextMessage or ByteMessage"
+      );
     }
     if (!out.isEmpty()) {
       callScheduler.setLastModelScore(out);
       try {
-        Logger.getLogger(ReceiveModelScore.class.getName()).log(Level.INFO, "JMS Message ID {0} has been read and sent to PublishModelScore", msg.getJMSMessageID());
+        Logger.getLogger(ReceiveModelScore.class.getName()).log(
+          Level.INFO,
+          "JMS Message ID {0} has been read and sent to PublishModelScore",
+          msg.getJMSMessageID()
+        );
       } catch (JMSException ex) {
-        Logger.getLogger(ReceiveModelScore.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger(ReceiveModelScore.class.getName()).log(
+          Level.SEVERE, null, ex
+        );
       }
     } else {
       try {
-        Logger.getLogger(ReceiveModelScore.class.getName()).log(Level.WARNING, "JMS Message ID {0} is empty", msg.getJMSMessageID());
+        Logger.getLogger(ReceiveModelScore.class.getName()).log(
+          Level.WARNING, "JMS Message ID {0} is empty", msg.getJMSMessageID()
+        );
       } catch (JMSException ex) {
-        Logger.getLogger(ReceiveModelScore.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger(ReceiveModelScore.class.getName()).log(
+          Level.SEVERE, null, ex
+        );
       }
     }
   }
