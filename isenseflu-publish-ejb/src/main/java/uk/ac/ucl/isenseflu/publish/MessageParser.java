@@ -52,6 +52,12 @@ public class MessageParser {
   private final String firstSuffix = "st of ";
   private final String secondSuffix = "nd of ";
   private final String thirdSuffix = "rd of ";
+  private final int scoreDecimalPlaces = 3;
+  private final float percent = 0.01f;
+  private final int lastDigitInDayDivisor = 10;
+  private final int firstOfModulus = 1;
+  private final int secondOfModulus = 2;
+  private final int thirdOfModulus = 3;
 
   @Inject
   private FetchScores fluDetectorScores;
@@ -60,55 +66,68 @@ public class MessageParser {
   private PlotModelScore plotModelScore;
 
   private final MessageFormat tweetFormat = new MessageFormat(
-          "Based on Google searches, the estimated flu (influenza-like illness) rate for England on the {0} was {1} cases per 100,000 people with an average 7-day {2} rate of {3}% compared to the previous 7-day period https://www.i-senseflu.org.uk/?start={4}&end={5}&resolution=day&smoothing=0&id=3&source=twlink #health #AI");
+    "Based on Google searches, the estimated flu (influenza-like illness) rate"
+      + " for England on the {0} was {1} cases per 100,000 people with an "
+      + "average 7-day {2} rate of {3}% compared to the previous 7-day period "
+      + "https://www.i-senseflu.org.uk/?start={4}&end={5}&resolution=day&"
+      + "smoothing=0&id=3&source=twlink #health #AI");
 
-  public TweetData getTweetData(String message) {
+  public TweetData getTweetData(final String message) {
     Properties properties = PropertyReader.readProperties(message)
-            .orElseThrow(() -> new IllegalArgumentException("Cannot read properties from message"));
+            .orElseThrow(
+              () -> new IllegalArgumentException(
+                "Cannot read properties from message"
+              )
+            );
 
     String date = properties.getProperty("date", "");
     String value = properties.getProperty("value", "");
 
     if (date.isEmpty() || !date.matches("^\\d{4}-\\d{2}-\\d{2}$")) {
-      throw new IllegalArgumentException("Date field not provided or date not in ISO format: date is " + date);
+      throw new IllegalArgumentException(
+        "Date field not provided or date not in ISO format: date is "
+          + date
+      );
     }
 
     if (value.isEmpty() || !value.matches("\\d+(\\.\\d+)?")) {
-      throw new IllegalArgumentException("Score value not provided or score value not a number: value is " + value);
+      throw new IllegalArgumentException(
+        "Score value not provided or score value not a number: value is "
+          + value
+      );
     }
 
     LocalDate endDate = LocalDate.parse(date);
     LocalDate startDate = LocalDate.parse(date).minusMonths(1);
     String ordinal = "th of ";
     int day = endDate.getDayOfMonth();
-    switch (day) {
-      case 1:
-      case 21:
-      case 31:
+    switch (day % lastDigitInDayDivisor) {
+      case firstOfModulus:
         ordinal = firstSuffix;
         break;
-      case 2:
-      case 22:
+      case secondOfModulus:
         ordinal = secondSuffix;
         break;
-      case 3:
-      case 23:
+      case thirdOfModulus:
         ordinal = thirdSuffix;
         break;
       default:
         break;
     }
     String formattedDate = endDate
-            .format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG).withLocale(Locale.UK))
+            .format(DateTimeFormatter.ofLocalizedDate(
+              FormatStyle.LONG).withLocale(Locale.UK)
+            )
             .replaceFirst("^0", "")
             .replaceAll("-", " ")
             .replaceFirst(" ", ordinal)
             .replaceFirst("( \\d{4})$", ",$1");
 
     BigDecimal bd = new BigDecimal(value);
-    bd = bd.setScale(3, RoundingMode.HALF_UP);
+    bd = bd.setScale(scoreDecimalPlaces, RoundingMode.HALF_UP);
 
-    List<DatapointModelScore> scoresList = fluDetectorScores.getScoresForLast30Days(endDate);
+    List<DatapointModelScore> scoresList = fluDetectorScores
+      .getScoresForLast30Days(endDate);
 
     BufferedImage chart = plotModelScore.createLineChart(scoresList);
 
@@ -123,21 +142,28 @@ public class MessageParser {
       variation = "decrease";
     }
 
-    Object[] toFormat = {formattedDate, bd.toPlainString(), variation, Math.abs(p * 100), startDate, endDate};
+    Object[] toFormat = {
+      formattedDate,
+      bd.toPlainString(),
+      variation,
+      Math.abs(p / percent),
+      startDate,
+      endDate
+    };
     String tweet = tweetFormat.format(toFormat);
 
     return new TweetData(tweet, chart);
   }
 
-  public class TweetData {
+  public final class TweetData {
 
     private final String tweet;
     private final BufferedImage chart;
     private final UUID chartId = UUID.randomUUID();
 
-    private TweetData(String tweet, BufferedImage chart) {
-      this.tweet = tweet;
-      this.chart = chart;
+    private TweetData(final String tweetStr, final BufferedImage chartImg) {
+      this.tweet = tweetStr;
+      this.chart = chartImg;
     }
 
     public String getTweet() {
