@@ -64,7 +64,7 @@ public class ReceiveModelScore implements MessageListener {
    */
   @Override
   public void onMessage(final Message msg) {
-    String out = "";
+    String out;
     if (msg instanceof TextMessage) {
       TextMessage txt = (TextMessage) msg;
       try {
@@ -78,7 +78,7 @@ public class ReceiveModelScore implements MessageListener {
         "Messages should be sent as UTF-8 text, content-length header should "
         + "not be present");
       BytesMessage byteMessage = (BytesMessage) msg;
-      byte[] byteData = null;
+      byte[] byteData;
       try {
         byteData = new byte[(int) byteMessage.getBodyLength()];
         byteMessage.readBytes(byteData);

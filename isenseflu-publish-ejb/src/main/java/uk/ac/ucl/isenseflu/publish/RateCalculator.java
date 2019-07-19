@@ -48,7 +48,7 @@ final class RateCalculator {
    * Function definition for calculating the average change rate of scores,
    * comparing the last 7 scores against the previous 7 scores.
    */
-  private static Function<List<Double>, Double> calculateAverageChangeRate =
+  private static final Function<List<Double>, Double> FUNCTION_AVG_CHANGE_RATE =
     (List<Double> l) -> {
       if (l.size() < MINIMUM_SIZE_OF_SCORES_LIST) {
         throw new IndexOutOfBoundsException(
@@ -65,7 +65,7 @@ final class RateCalculator {
     };
 
   static Function<List<Double>, Double> averageChangeRate() {
-    return calculateAverageChangeRate;
+    return FUNCTION_AVG_CHANGE_RATE;
   }
 
 }

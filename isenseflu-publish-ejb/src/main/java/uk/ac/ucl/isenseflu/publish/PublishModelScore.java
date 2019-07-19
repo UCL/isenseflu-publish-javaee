@@ -108,11 +108,6 @@ public class PublishModelScore {
   private final ClientConfig clientConfig = new ClientConfig();
 
   /**
-   * An instance of a JAX-RS client. Defaults to Jersey.
-   */
-  private Client client;
-
-  /**
    * Prepared request for calling the status endpoint in Twitter API.
    * (Publishes a new tweet).
    */
@@ -141,7 +136,7 @@ public class PublishModelScore {
       LoggingFeature.Verbosity.PAYLOAD_ANY
     );
 
-    client = ClientBuilder.newBuilder()
+    Client client = ClientBuilder.newBuilder()
       .withConfig(clientConfig)
       .register(filterFeature)
       .register(MultiPartFeature.class)
