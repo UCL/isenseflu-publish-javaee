@@ -73,28 +73,28 @@ public class PlotModelScore {
   /**
    * The title of the chart.
    */
-  private final String title =
+  private static final String TITLE =
     "Daily flu (influenza-like illness) rates for England";
 
   /**
    * The name of the time series.
    */
-  private final String series = "Google v2.018.04/England";
+  private static final String SERIES = "Google v2.018.04/England";
 
   /**
    * The label in the x-axis.
    */
-  private final String xlabel = "Date";
+  private static final String XLABEL = "Date";
 
   /**
    * The label in the y-axis.
    */
-  private final String ylabel = "ILI Rate";
+  private static final String YLABEL = "ILI Rate";
 
   /**
    * The time series for the model data. Expected to be in days.
    */
-  private final TimeSeries timeSeries = new TimeSeries(series);
+  private final TimeSeries timeSeries = new TimeSeries(SERIES);
 
   /**
    * A collection of scores to be used in the time series.
@@ -176,7 +176,7 @@ public class PlotModelScore {
     dataset.addSeries(timeSeries);
 
     JFreeChart chart = ChartFactory.createTimeSeriesChart(
-      title, xlabel, ylabel, dataset
+      TITLE, XLABEL, YLABEL, dataset
     );
 
     chart.getTitle().setFont(titleFont);

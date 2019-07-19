@@ -54,7 +54,7 @@ public class CallScheduler {
    * Can be overridden with the system property or environment variable
    * TWITTER_SCHEDULED_FOR
    */
-  private final String defaultTweetTime = "16:00";
+  private static final String DEFAULT_TWEET_TIME = "16:00";
 
   /**
    * Array to contain the date of the last score published, and the value of
@@ -90,7 +90,7 @@ public class CallScheduler {
     String twitterScheduledFor = PropertyReader
       .getFromSystemOrEnv("TWITTER_SCHEDULED_FOR");
     String[] tweetTimeHourMin = twitterScheduledFor.indexOf(":") == 2
-      ? twitterScheduledFor.split(":") : defaultTweetTime.split(":");
+      ? twitterScheduledFor.split(":") : DEFAULT_TWEET_TIME.split(":");
     ScheduleExpression expression = new ScheduleExpression();
     expression.hour(tweetTimeHourMin[0]);
     expression.minute(tweetTimeHourMin[1]);

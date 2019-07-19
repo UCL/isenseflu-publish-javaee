@@ -58,7 +58,7 @@ public class FetchScores {
   /**
    * The number of days used to calculate the start date.
    */
-  private final int numberDaysForStartDate = 30;
+  private static final int NUMBER_DAYS_FOR_START_DATE = 30;
 
   /**
    * Calls the i-sense flu API to fetch the scores for a window of 30 days
@@ -69,7 +69,8 @@ public class FetchScores {
   public List<DatapointModelScore> getScoresForLast30Days(
     final LocalDate localDate
   ) {
-    String startDate = localDate.minusDays(numberDaysForStartDate).toString();
+    String startDate = localDate.minusDays(NUMBER_DAYS_FOR_START_DATE)
+      .toString();
     String endDate = localDate.toString();
 
     final Response response = client.target(scoresUri)

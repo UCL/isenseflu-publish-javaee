@@ -22,6 +22,7 @@
 
 package uk.ac.ucl.isenseflu.publish;
 
+import java.nio.charset.StandardCharsets;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.ActivationConfigProperty;
@@ -82,7 +83,7 @@ public class ReceiveModelScore implements MessageListener {
         byteData = new byte[(int) byteMessage.getBodyLength()];
         byteMessage.readBytes(byteData);
         byteMessage.reset();
-        out = new String(byteData);
+        out = new String(byteData, StandardCharsets.UTF_8);
       } catch (JMSException ex) {
         throw new RuntimeException(ex);
       }

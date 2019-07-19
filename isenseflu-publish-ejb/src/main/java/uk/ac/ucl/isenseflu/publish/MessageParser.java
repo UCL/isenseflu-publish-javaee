@@ -57,47 +57,47 @@ public class MessageParser {
   /**
    * Ordinal suffix to use with days ending in 1.
    */
-  private final String firstSuffix = "st of ";
+  private static final String FIRST_SUFFIX = "st of ";
 
   /**
    * Ordinal suffix to use with days ending in 2.
    */
-  private final String secondSuffix = "nd of ";
+  private static final String SECOND_SUFFIX = "nd of ";
 
   /**
    * Ordinal suffix to use with days ending in 3.
    */
-  private final String thirdSuffix = "rd of ";
+  private static final String THIRD_SUFFIX = "rd of ";
 
   /**
    * Number of decimal places that the score should use in a tweet.
    */
-  private final int scoreDecimalPlaces = 3;
+  private static final int SCORE_DECIMAL_PLACES = 3;
 
   /**
    * For calculation of percentages.
    */
-  private final float percent = 0.01f;
+  private static final float PERCENT = 0.01f;
 
   /**
    * Divisor used in the extraction of the last digit of a day number.
    */
-  private final int lastDigitInDayDivisor = 10;
+  private static final int LAST_DIGIT_IN_DAY_DIVISOR = 10;
 
   /**
    * Remainder for days ending in 1.
    */
-  private final int firstOfModulus = 1;
+  private static final int FIRST_OF_MODULUS = 1;
 
   /**
    * Remainder for days ending in 2.
    */
-  private final int secondOfModulus = 2;
+  private static final int SECOND_OF_MODULUS = 2;
 
   /**
    * Remainder for days ending in 3.
    */
-  private final int thirdOfModulus = 3;
+  private static final int THIRD_OF_MODULUS = 3;
 
   /**
    * Bean responsible for the retrieval of flu scores from the i-sense flu API.
@@ -165,15 +165,15 @@ public class MessageParser {
     LocalDate startDate = LocalDate.parse(date).minusMonths(1);
     String ordinal = "th of ";
     int day = endDate.getDayOfMonth();
-    switch (day % lastDigitInDayDivisor) {
-      case firstOfModulus:
-        ordinal = firstSuffix;
+    switch (day % LAST_DIGIT_IN_DAY_DIVISOR) {
+      case FIRST_OF_MODULUS:
+        ordinal = FIRST_SUFFIX;
         break;
-      case secondOfModulus:
-        ordinal = secondSuffix;
+      case SECOND_OF_MODULUS:
+        ordinal = SECOND_SUFFIX;
         break;
-      case thirdOfModulus:
-        ordinal = thirdSuffix;
+      case THIRD_OF_MODULUS:
+        ordinal = THIRD_SUFFIX;
         break;
       default:
         break;
@@ -188,7 +188,7 @@ public class MessageParser {
             .replaceFirst("( \\d{4})$", ",$1");
 
     BigDecimal bd = new BigDecimal(value);
-    bd = bd.setScale(scoreDecimalPlaces, RoundingMode.HALF_UP);
+    bd = bd.setScale(SCORE_DECIMAL_PLACES, RoundingMode.HALF_UP);
 
     List<DatapointModelScore> scoresList = fluDetectorScores
       .getScoresForLast30Days(endDate);
@@ -210,7 +210,7 @@ public class MessageParser {
       formattedDate,
       bd.toPlainString(),
       variation,
-      Math.abs(p / percent),
+      Math.abs(p / PERCENT),
       startDate,
       endDate
     };
@@ -219,7 +219,7 @@ public class MessageParser {
     return new TweetData(tweet, chart);
   }
 
-  public final class TweetData {
+  public static final class TweetData {
 
     /**
      * The generated text of the tweet.
