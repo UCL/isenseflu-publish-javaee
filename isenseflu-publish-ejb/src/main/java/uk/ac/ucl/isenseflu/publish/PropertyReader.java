@@ -28,11 +28,20 @@ import java.util.Optional;
 import java.util.Properties;
 
 /**
- *
+ * Utility methods to used for passing or reading configuration properties.
  * @author David Guzman
  */
-public class PropertyReader {
+public final class PropertyReader {
 
+  private PropertyReader() { }
+
+  /**
+   * Obtains the value for a property key, first from the list of system
+   * properties, if it can be found then it attempts to find the property
+   * from the environment.
+   * @param key The name of the property.
+   * @return    The value of the property.
+   */
   public static String getFromSystemOrEnv(final String key) {
     String value = System.getProperty(key, "");
     if (value.isEmpty()) {
@@ -41,7 +50,18 @@ public class PropertyReader {
     return (value != null) ? value : "";
   }
 
-  public static String getFromSystemOrEnvOrElse(final String key, final String defaultValue) {
+  /**
+   * Obtains the value for a property key, first from the list of system
+   * properties, if it can be found then it attempts to find the property
+   * from the environment. If both fail, then it returns the default value
+   * provided.
+   * @param key           The name of the property.
+   * @param defaultValue  The default value for the property.
+   * @return              The value of the property.
+   */
+  public static String getFromSystemOrEnvOrElse(
+    final String key, final String defaultValue
+  ) {
     String value = System.getProperty(key, "");
     if (value.isEmpty()) {
       value = System.getenv(key);
@@ -49,7 +69,12 @@ public class PropertyReader {
     return (value != null) ? value : defaultValue;
   }
 
-  public static Optional<Properties> readProperties(String propstr) {
+  /**
+   * Reads a set of properties from a String.
+   * @param propstr The string containing the properties.
+   * @return        An Optional with the properties (if found).
+   */
+  public static Optional<Properties> readProperties(final String propstr) {
     final Properties p = new Properties();
     try {
       p.load(new StringReader(propstr));
