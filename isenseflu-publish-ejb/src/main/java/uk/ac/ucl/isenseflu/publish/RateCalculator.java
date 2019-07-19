@@ -30,9 +30,11 @@ import java.util.stream.Collectors;
  *
  * @author David Guzman
  */
-public class RateCalculator {
+final class RateCalculator {
 
-  public static Function<List<Double>, Double> averageChangeRate = (List<Double> l) -> {
+  private RateCalculator() { }
+
+  static Function<List<Double>, Double> averageChangeRate = (List<Double> l) -> {
     if (l.size() < 15) {
       throw new IndexOutOfBoundsException("Not enough items in List to perform calculation");
     }

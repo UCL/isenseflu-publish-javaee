@@ -31,7 +31,7 @@ import java.util.Properties;
  * Utility methods to used for passing or reading configuration properties.
  * @author David Guzman
  */
-public final class PropertyReader {
+final class PropertyReader {
 
   private PropertyReader() { }
 
@@ -42,7 +42,7 @@ public final class PropertyReader {
    * @param key The name of the property.
    * @return    The value of the property.
    */
-  public static String getFromSystemOrEnv(final String key) {
+  static String getFromSystemOrEnv(final String key) {
     String value = System.getProperty(key, "");
     if (value.isEmpty()) {
       value = System.getenv(key);
@@ -59,7 +59,7 @@ public final class PropertyReader {
    * @param defaultValue  The default value for the property.
    * @return              The value of the property.
    */
-  public static String getFromSystemOrEnvOrElse(
+  static String getFromSystemOrEnvOrElse(
     final String key, final String defaultValue
   ) {
     String value = System.getProperty(key, "");
@@ -74,7 +74,7 @@ public final class PropertyReader {
    * @param propstr The string containing the properties.
    * @return        An Optional with the properties (if found).
    */
-  public static Optional<Properties> readProperties(final String propstr) {
+  static Optional<Properties> readProperties(final String propstr) {
     final Properties p = new Properties();
     try {
       p.load(new StringReader(propstr));
