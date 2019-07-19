@@ -77,12 +77,12 @@ asadmin> create-password-alias twitter-apikey-alias
 The i-sense flu API component is scheduled to send the latest score via a STOMP message. Glassfish provides an installation of OpenMQ that supports STOMP messaging via a JMS bridge. This can be enabled and configured with `asadmin`
 
 ```
-asadmin> set configs.config.config-name.jms-service.type=LOCAL
-asadmin> set configs.config.config-name.jms-service.property.imq\\.jmsra\\.managed=true
-asadmin> set configs.config.config-name.jms-service.property.imq\\.bridge\\.enabled=true
-asadmin> set configs.config.config-name.jms-service.property.imq\\.bridge\\.admin\\.user=[username]
-asadmin> set configs.config.config-name.jms-service.property.imq\\.bridge\\.admin\\.password=[password]
-asadmin> set configs.config.config-name.jms-service.property.imq\\.bridge\\.activelist=stomp
+asadmin> set configs.config.server-config.jms-service.type=LOCAL
+asadmin> set configs.config.server-config.jms-service.property.imq\\.jmsra\\.managed=true
+asadmin> set configs.config.server-config.jms-service.property.imq\\.bridge\\.enabled=true
+asadmin> set configs.config.server-config.jms-service.property.imq\\.bridge\\.admin\\.user=[username]
+asadmin> set configs.config.server-config.jms-service.property.imq\\.bridge\\.admin\\.password=${ALIAS\\=imq-adminpass-alias}
+asadmin> set configs.config.server-config.jms-service.property.imq\\.bridge\\.activelist=stomp
 ```
 
 Restart the Glassfish domain to activate the configuration
@@ -108,9 +108,9 @@ The following system properties are required to be configured in the application
 In Glassfish these system properties can be configured as follows:
 
 ```
-asadmin> create-system-properties API_SCORES_URI=http\\://localhost\\:8080/api/flu/scores \
-TWITTER_SCHEDULED_FOR=16\\:00
-asadmin> create-system-properties 'TWITTER_KEY=${ALIAS\=twitter-apikey-alias}'
+asadmin> create-system-properties API_SCORES_URI=http\\://localhost\\:8080/api/flu/scores
+asadmin> create-system-properties TWITTER_SCHEDULED_FOR=16\\:00
+asadmin> create-system-properties TWITTER_KEY='${ALIAS\=twitter-apikey-alias}'
 ```
 
 Alternatively, these values can be configured via environment variables in the shell. This way of configuration can be used when deploying to environments like Openshift or Heroku.
