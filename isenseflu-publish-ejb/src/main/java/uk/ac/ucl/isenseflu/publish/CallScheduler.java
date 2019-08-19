@@ -25,6 +25,8 @@ package uk.ac.ucl.isenseflu.publish;
 import java.time.LocalDate;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.atomic.AtomicReferenceArray;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
@@ -121,6 +123,10 @@ public class CallScheduler {
     if (!score.isEmpty()) {
       lastModelScore.set(0, LocalDate.now().toString());
       lastModelScore.set(1, score);
+      Logger.getLogger(CallScheduler.class.getName()).log(
+        Level.INFO,
+        "Score data received and stored"
+      );
     }
   }
 
