@@ -22,13 +22,12 @@
 
 package uk.ac.ucl.isenseflu.publish;
 
-import java.time.LocalDate;
-import java.util.concurrent.atomic.AtomicReferenceArray;
-import mockit.Deencapsulation;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import mockit.Expectations;
 import mockit.Injectable;
 import mockit.Tested;
 import mockit.Verifications;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import javax.ejb.TimerService;
@@ -50,13 +49,12 @@ public class CallSchedulerTest {
 
   @Test
   public void testSetScore() {
-    String expectedScore = "1234";
-    instance.setLastModelScore(expectedScore);
-    AtomicReferenceArray<String> lastScore = Deencapsulation.getField(instance, "lastModelScore");
-    Assertions.assertAll("lastModelScore",
-            () -> Assertions.assertEquals(LocalDate.now().toString(), lastScore.get(0)),
-            () -> Assertions.assertEquals(expectedScore, lastScore.get(1))
-    );
+    final Logger logger = Logger.getLogger(CallScheduler.class.getName());
+    new Expectations(logger) {{
+      logger.log(Level.INFO, "Score data received and stored");
+      times = 1;
+    }};
+    instance.setLastModelScore("1234");
   }
 
   @Test
