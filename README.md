@@ -10,7 +10,11 @@ Module of the i-sense flu application used in the scheduled publication of model
 
 ## Background
 
-i-sense flu is a multi-module application that uses Google search data to estimate influenza-like illness (flu) rates in England. The i-sense flu publish module is responsible for publishing a tweet containing the latest score, along with a chart showing the scores for the last 30 days, and the rate of change in the scores, relative to the previous 7-day period.
+i-sense flu is a multi-module application that uses Google search data to 
+estimate influenza-like illness (flu) rates in England. The i-sense flu publish 
+module is responsible for publishing a tweet containing the latest score, 
+along with a chart showing the scores for the last 30 days, and the rate of 
+change in the scores of the last 28 days, relative to the previous 28-day period.
 
 
 ## Features
