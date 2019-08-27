@@ -80,7 +80,7 @@ public class FetchScoresTest {
       result = jsonObject;
     }};
 
-    List<DatapointModelScore> scoresList = instance.getScoresForLast30Days(localDate);
+    List<DatapointModelScore> scoresList = instance.getScoresForLast56Days(localDate);
 
     Assertions.assertAll(
       () -> Assertions.assertEquals(30, scoresList.size()),
@@ -123,7 +123,7 @@ public class FetchScoresTest {
       }
     };
 
-    List<DatapointModelScore> scoresList = instance.getScoresForLast30Days(localDate);
+    List<DatapointModelScore> scoresList = instance.getScoresForLast56Days(localDate);
     Assertions.assertEquals(2, scoresList.size());
   }
 
