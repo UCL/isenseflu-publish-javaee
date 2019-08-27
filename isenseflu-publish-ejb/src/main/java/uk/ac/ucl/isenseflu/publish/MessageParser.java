@@ -33,6 +33,7 @@ import java.text.MessageFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
@@ -120,16 +121,16 @@ public class MessageParser {
   private final MessageFormat tweetFormat = new MessageFormat(
     "Based on Google searches, the estimated flu (influenza-like illness) rate"
       + " for England on the {0} was {1} cases per 100,000 people with an "
-      + "average 7-day {2} rate of {3}% compared to the previous 7-day period "
-      + "https://www.i-senseflu.org.uk/?start={4}&end={5}&resolution=day&"
-      + "smoothing=0&id=3&source=twlink #health #AI");
+      + "average 28-day {2} rate of {3}% compared to the previous 28-day "
+      + "period https://www.i-senseflu.org.uk/?start={4}&end={5}&resolution=day"
+      + "&smoothing=0&id=3&source=twlink #health #AI");
 
   /**
    * Generates the text of the tweet and the chart image to publish on Twitter.
    * It uses a one month period before the date of the score to provide the
    * data for the chart and rate change, calling FetchScores for the retrieval
-   * of the scores for the previous month and PlotModelScore to generate the
-   * chart.
+   * of the scores for the previous 56 days (sorted by date in descending order)
+   * and PlotModelScore to generate the chart.
    * @param message A string containing the score data in a format that can
    *                be read as Properties. The properties required are: date
    *                (in ISO format) and value (a number).
@@ -191,9 +192,12 @@ public class MessageParser {
     bd = bd.setScale(SCORE_DECIMAL_PLACES, RoundingMode.HALF_UP);
 
     List<DatapointModelScore> scoresList = fluDetectorScores
-      .getScoresForLast30Days(endDate);
+      .getScoresForLast56Days(endDate);
 
-    BufferedImage chart = plotModelScore.createLineChart(scoresList);
+    // Use a copy last 30 days from scoresList. Not thread-safe
+    BufferedImage chart = plotModelScore.createLineChart(
+      new ArrayList<>(scoresList.subList(0, 30))
+    );
 
     List<Double> scores = scoresList.stream()
             .map((DatapointModelScore s) -> s.getScoreValue())

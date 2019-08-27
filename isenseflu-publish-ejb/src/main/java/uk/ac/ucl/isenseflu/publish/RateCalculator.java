@@ -37,16 +37,16 @@ final class RateCalculator {
   /**
    * Number of scores + 1, required to perform the calculation.
    */
-  private static final int MINIMUM_SIZE_OF_SCORES_LIST = 15;
+  private static final int MINIMUM_SIZE_OF_SCORES_LIST = 56;
 
   /**
    * Size of the window used to calculate the change rate.
    */
-  private static final int AVG_WINDOW_SIZE = 7;
+  private static final int AVG_WINDOW_SIZE = 28;
 
   /**
    * Function definition for calculating the average change rate of scores,
-   * comparing the last 7 scores against the previous 7 scores.
+   * comparing the last 28 scores against the previous 28 scores.
    */
   private static final Function<List<Double>, Double> FUNCTION_AVG_CHANGE_RATE =
     (List<Double> l) -> {

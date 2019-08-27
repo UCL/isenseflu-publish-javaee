@@ -58,15 +58,16 @@ public class FetchScores {
   /**
    * The number of days used to calculate the start date.
    */
-  private static final int NUMBER_DAYS_FOR_START_DATE = 30;
+  private static final int NUMBER_DAYS_FOR_START_DATE = 56;
 
   /**
-   * Calls the i-sense flu API to fetch the scores for a window of 30 days
-   * building a list of data points with them.
+   * Calls the i-sense flu API to fetch the scores for a window of 56 days
+   * building a list of data points with them. It assumes the API returns the
+   * scores sorted by date in descending order.
    * @param localDate The end date of the time window to call the scores for.
-   * @return A list of data points in the time series for a window of 30 days.
+   * @return A list of data points in the time series for a window of 56 days.
    */
-  public List<DatapointModelScore> getScoresForLast30Days(
+  public List<DatapointModelScore> getScoresForLast56Days(
     final LocalDate localDate
   ) {
     String startDate = localDate.minusDays(NUMBER_DAYS_FOR_START_DATE)

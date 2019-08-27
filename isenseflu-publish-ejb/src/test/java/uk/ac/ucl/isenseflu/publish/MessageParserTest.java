@@ -22,6 +22,7 @@
 
 package uk.ac.ucl.isenseflu.publish;
 
+import java.text.MessageFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,7 +59,9 @@ public class MessageParserTest {
   public static void populateDatapoints() {
     AtomicInteger counter = new AtomicInteger(0);
     Arrays.asList(SCORES).forEach((Double s) -> {
-      DATAPOINTS.add(new DatapointModelScore(START_DATE.plusDays(counter.getAndAdd(1)), s));
+      DATAPOINTS.add(
+        new DatapointModelScore(START_DATE.plusDays(counter.getAndAdd(1)), s)
+      );
     });
   }
 
@@ -66,13 +69,19 @@ public class MessageParserTest {
   public void testGetTweetData() {
     new Expectations() {
       {
-        fluDetectorScores.getScoresForLast30Days(LocalDate.of(2018, 5, 20));
+        fluDetectorScores.getScoresForLast56Days(LocalDate.of(2018, 5, 20));
         result = DATAPOINTS;
       }
     };
-    String message = "date=2018-05-20" + System.lineSeparator() + "value=2.892199";
+    String message = "date=2018-05-20" + System.lineSeparator()
+      + "value=2.892199";
     MessageParser.TweetData tweetData = instance.getTweetData(message);
-    String expected = "Based on Google searches, the estimated flu (influenza-like illness) rate for England on the 20th of May, 2018 was 2.892 cases per 100,000 people with an average 7-day increase rate of 25.59% compared to the previous 7-day period https://www.i-senseflu.org.uk/?start=2018-04-20&end=2018-05-20&resolution=day&smoothing=0&id=3&source=twlink #health #AI";
+    String expected = "Based on Google searches, the estimated flu "
+      + "(influenza-like illness) rate for England on the 20th of May, 2018 was"
+      + " 2.892 cases per 100,000 people with an average 28-day increase rate "
+      + "of 18.084% compared to the previous 28-day period "
+      + "https://www.i-senseflu.org.uk/?start=2018-04-20&end=2018-05-20&"
+      + "resolution=day&smoothing=0&id=3&source=twlink #health #AI";
     Assertions.assertEquals(expected, tweetData.getTweet());
   }
 
@@ -80,43 +89,60 @@ public class MessageParserTest {
   public void testGetTweetDataDates() {
     new Expectations() {
       {
-        fluDetectorScores.getScoresForLast30Days(withInstanceOf(LocalDate.class));
+        fluDetectorScores.getScoresForLast56Days(
+          withInstanceOf(LocalDate.class)
+        );
         result = DATAPOINTS;
       }
     };
 
+    final MessageFormat msgFormat = new MessageFormat("Based on Google searches"
+      + ", the estimated flu (influenza-like illness) rate for England on the "
+      + "{0} of May, 2018 was 2.892 cases per 100,000 people with an average "
+      + "28-day increase rate of 18.084% compared to the previous 28-day period"
+      + " https://www.i-senseflu.org.uk/?start=2018-{1}&end=2018-{2}&"
+      + "resolution=day&smoothing=0&id=3&source=twlink #health #AI");
+
+    Object[] the20th = {"20th", "04-20", "05-20"};
+    Object[] the1st = {"1st", "04-01", "05-01"};
+    Object[] the2nd = {"2nd", "04-02", "05-02"};
+    Object[] the3rd = {"3rd", "04-03", "05-03"};
+    Object[] the21st = {"21st", "04-21", "05-21"};
+    Object[] the22nd = {"22nd", "04-22", "05-22"};
+    Object[] the23rd = {"23rd", "04-23", "05-23"};
+    Object[] the31st = {"31st", "04-30", "05-31"};
     String[][] assertInputs = {
       {
         "date=2018-05-20",
-        "Based on Google searches, the estimated flu (influenza-like illness) rate for England on the 20th of May, 2018 was 2.892 cases per 100,000 people with an average 7-day increase rate of 25.59% compared to the previous 7-day period https://www.i-senseflu.org.uk/?start=2018-04-20&end=2018-05-20&resolution=day&smoothing=0&id=3&source=twlink #health #AI"
+        msgFormat.format(the20th)
       },
       {
         "date=2018-05-01",
-        "Based on Google searches, the estimated flu (influenza-like illness) rate for England on the 1st of May, 2018 was 2.892 cases per 100,000 people with an average 7-day increase rate of 25.59% compared to the previous 7-day period https://www.i-senseflu.org.uk/?start=2018-04-01&end=2018-05-01&resolution=day&smoothing=0&id=3&source=twlink #health #AI"
+        msgFormat.format(the1st)
       },
       {
         "date=2018-05-02",
-        "Based on Google searches, the estimated flu (influenza-like illness) rate for England on the 2nd of May, 2018 was 2.892 cases per 100,000 people with an average 7-day increase rate of 25.59% compared to the previous 7-day period https://www.i-senseflu.org.uk/?start=2018-04-02&end=2018-05-02&resolution=day&smoothing=0&id=3&source=twlink #health #AI"
+        msgFormat.format(the2nd)
       },
       {
         "date=2018-05-03",
-        "Based on Google searches, the estimated flu (influenza-like illness) rate for England on the 3rd of May, 2018 was 2.892 cases per 100,000 people with an average 7-day increase rate of 25.59% compared to the previous 7-day period https://www.i-senseflu.org.uk/?start=2018-04-03&end=2018-05-03&resolution=day&smoothing=0&id=3&source=twlink #health #AI"
+        msgFormat.format(the3rd)
       },
       {
         "date=2018-05-21",
-        "Based on Google searches, the estimated flu (influenza-like illness) rate for England on the 21st of May, 2018 was 2.892 cases per 100,000 people with an average 7-day increase rate of 25.59% compared to the previous 7-day period https://www.i-senseflu.org.uk/?start=2018-04-21&end=2018-05-21&resolution=day&smoothing=0&id=3&source=twlink #health #AI"
+        msgFormat.format(the21st)
       },
       {
         "date=2018-05-22",
-        "Based on Google searches, the estimated flu (influenza-like illness) rate for England on the 22nd of May, 2018 was 2.892 cases per 100,000 people with an average 7-day increase rate of 25.59% compared to the previous 7-day period https://www.i-senseflu.org.uk/?start=2018-04-22&end=2018-05-22&resolution=day&smoothing=0&id=3&source=twlink #health #AI"
+        msgFormat.format(the22nd)
       },
       {
         "date=2018-05-23",
-        "Based on Google searches, the estimated flu (influenza-like illness) rate for England on the 23rd of May, 2018 was 2.892 cases per 100,000 people with an average 7-day increase rate of 25.59% compared to the previous 7-day period https://www.i-senseflu.org.uk/?start=2018-04-23&end=2018-05-23&resolution=day&smoothing=0&id=3&source=twlink #health #AI"
+        msgFormat.format(the23rd)
       },
       {
         "date=2018-05-31",
-        "Based on Google searches, the estimated flu (influenza-like illness) rate for England on the 31st of May, 2018 was 2.892 cases per 100,000 people with an average 7-day increase rate of 25.59% compared to the previous 7-day period https://www.i-senseflu.org.uk/?start=2018-04-30&end=2018-05-31&resolution=day&smoothing=0&id=3&source=twlink #health #AI"
+        msgFormat.format(the31st)
       }
     };
 

@@ -160,7 +160,7 @@ public class SystemIT {
     JsonReader reader = Json.createReader(new StringReader(statusReq));
     JsonObject jsonObject = reader.readArray().getJsonObject(0);
     String statusText = jsonObject.getJsonObject("body").getString("string");
-    String expected = "status=Based+on+Google+searches%2C+the+estimated+flu+%28influenza-like+illness%29+rate+for+England+on+the+1st+of+January%2C+2019+was+0.123+cases+per+100%2C000+people+with+an+average+7-day+increase+rate+of+23.948%25+compared+to+the+previous+7-day+period+https%3A%2F%2Fwww.i-senseflu.org.uk%2F%3Fstart%3D2018-12-01%26end%3D2019-01-01%26resolution%3Dday%26smoothing%3D0%26id%3D3%26source%3Dtwlink+%23health+%23AI&media_ids=710511363345354753";
+    String expected = "status=Based+on+Google+searches%2C+the+estimated+flu+%28influenza-like+illness%29+rate+for+England+on+the+1st+of+January%2C+2019+was+0.123+cases+per+100%2C000+people+with+an+average+28-day+increase+rate+of+59.067%25+compared+to+the+previous+28-day+period+https%3A%2F%2Fwww.i-senseflu.org.uk%2F%3Fstart%3D2018-12-01%26end%3D2019-01-01%26resolution%3Dday%26smoothing%3D0%26id%3D3%26source%3Dtwlink+%23health+%23AI&media_ids=710511363345354753";
     Assertions.assertEquals(expected, statusText);
   }
 
