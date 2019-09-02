@@ -35,12 +35,18 @@ final class RateCalculator {
   private RateCalculator() { }
 
   /**
-   * Number of scores + 1, required to perform the calculation.
+   * Number of scores required to perform the calculation.
    */
-  private static final int MINIMUM_SIZE_OF_SCORES_LIST = 56;
+  private static final int MINIMUM_SIZE_OF_SCORES_LIST = 35;
 
   /**
-   * Size of the window used to calculate the change rate.
+   * Period of time in days used for calculating the change rate in the latest
+   * scores.
+   */
+  private static final int LATEST_WINDOW_SIZE = 7;
+
+  /**
+   * Size of the window used as a reference to calculate the change rate.
    */
   private static final int AVG_WINDOW_SIZE = 28;
 
@@ -56,9 +62,12 @@ final class RateCalculator {
         );
       }
 
-      double f1 = l.subList(0, AVG_WINDOW_SIZE).stream()
+      double f1 = l.subList(0, LATEST_WINDOW_SIZE).stream()
         .collect(Collectors.averagingDouble(x -> x));
-      double f2 = l.subList(AVG_WINDOW_SIZE, AVG_WINDOW_SIZE * 2).stream()
+      double f2 = l.subList(
+        LATEST_WINDOW_SIZE, LATEST_WINDOW_SIZE + AVG_WINDOW_SIZE
+      )
+        .stream()
         .collect(Collectors.averagingDouble(x -> x));
 
       return (f1 - f2) / f2;

@@ -40,13 +40,13 @@ public class RateCalculatorTest {
     List<Double> scoreList = Arrays.asList(SCORES);
 
     Assertions.assertEquals(
-      0.18083853560079705d, RateCalculator.averageChangeRate().apply(scoreList)
+      0.34055184981326747d, RateCalculator.averageChangeRate().apply(scoreList)
     );
   }
 
   @Test
   public void testException() {
-    List<Double> scoreList = Arrays.asList(SCORES).subList(0, 55);
+    List<Double> scoreList = Arrays.asList(SCORES).subList(0, 34);
     Throwable exception = Assertions.assertThrows(IndexOutOfBoundsException.class, () -> {
       RateCalculator.averageChangeRate().apply(scoreList);
     });
