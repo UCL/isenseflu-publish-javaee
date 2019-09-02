@@ -78,8 +78,8 @@ public class MessageParserTest {
     MessageParser.TweetData tweetData = instance.getTweetData(message);
     String expected = "Based on Google searches, the estimated flu "
       + "(influenza-like illness) rate for England on the 20th of May, 2018 was"
-      + " 2.892 cases per 100,000 people with an average 28-day increase rate "
-      + "of 18.084% compared to the previous 28-day period "
+      + " 2.892 cases per 100,000 people with an average 7-day increase rate "
+      + "of 34.055% compared to the previous 28-day period "
       + "https://www.i-senseflu.org.uk/?start=2018-04-20&end=2018-05-20&"
       + "resolution=day&smoothing=0&id=3&source=twlink #health #AI";
     Assertions.assertEquals(expected, tweetData.getTweet());
@@ -99,7 +99,7 @@ public class MessageParserTest {
     final MessageFormat msgFormat = new MessageFormat("Based on Google searches"
       + ", the estimated flu (influenza-like illness) rate for England on the "
       + "{0} of May, 2018 was 2.892 cases per 100,000 people with an average "
-      + "28-day increase rate of 18.084% compared to the previous 28-day period"
+      + "7-day increase rate of 34.055% compared to the previous 28-day period"
       + " https://www.i-senseflu.org.uk/?start=2018-{1}&end=2018-{2}&"
       + "resolution=day&smoothing=0&id=3&source=twlink #health #AI");
 
